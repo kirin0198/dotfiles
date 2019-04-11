@@ -4,7 +4,6 @@ set list
 set pumheight=10
 set title
 set textwidth=0
-set colorcolumn=80
 
 """ Mute
 set t_vb=
@@ -16,7 +15,7 @@ set cursorline
 syntax on
 highlight cursorline term=reverse cterm=none ctermbg=236
 "colorscheme torte
-"set colorcolumn=80
+" set colorcolumn=80
 
 
 """ search
