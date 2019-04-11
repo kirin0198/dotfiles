@@ -1,20 +1,16 @@
-"" Disply
-""set number
+""" Disply
+"set number
 set list
 set pumheight=10
 set title
 set textwidth=0
 set colorcolumn=80
 
-" スクリーンベルを無効化
+""" Mute
 set t_vb=
 set novisualbell
 
-" デフォルト不可視文字は美しくないのでUnicodeで綺麗に
-set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:↲
-
-
-" Color
+""" Color
 set t_Co=256
 set cursorline
 syntax on
@@ -23,13 +19,13 @@ highlight cursorline term=reverse cterm=none ctermbg=236
 "set colorcolumn=80
 
 
-" search
+""" search
 set incsearch
 set ignorecase
 set smartcase
 set hlsearch
 
-" バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
+""" Escape
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
@@ -43,34 +39,27 @@ set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバ
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 
-" 対応括弧に'<'と'>'のペアを追加
+""" Hilight brackets
 set matchpairs& matchpairs+=<:>
 
-" バックスペースでなんでも消せるようにする
+""" Back space
 "set backspace=indent,eol,start
 
-" クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
-" 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
-if has('unnamedplus')
-    " set clipboard& clipboard+=unnamedplus " 2013-07-03 14:30 unnamed 追加
-    set clipboard& clipboard+=unnamedplus,unnamed
-else
-    " set clipboard& clipboard+=unnamed,autoselect 2013-06-24 10:00 autoselect 削除
-    set clipboard& clipboard+=unnamed
-endif
 
-" Swapファイルを全て無効化する
+""" Disable swap
 set nowritebackup
 set nobackup
 set noswapfile
 
 
-" tab space
+""" Tab to space
 set listchars=tab:^\ ,trail:~
 set expandtab
 set shiftwidth=2
 set softtabstop=2
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+
+""" Highlight Trailing Spaces
 augroup HighlightTrailingSpaces
   autocmd!
   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
