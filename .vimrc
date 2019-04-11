@@ -1,6 +1,10 @@
+""" Specify character code
+set encoding=utf-8
+scriptencoding utf-8
+
 """ Disply
 "set number
-set list
+"set list
 set pumheight=10
 set title
 set textwidth=0
@@ -18,7 +22,7 @@ highlight cursorline term=reverse cterm=none ctermbg=236
 " set colorcolumn=80
 
 
-""" search
+""" Search
 set incsearch
 set ignorecase
 set smartcase
@@ -64,5 +68,10 @@ augroup HighlightTrailingSpaces
   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
   autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
 augroup END
-autocmd BufWinLeave ?* silent mkview
-autocmd BufWinEnter ?* silent loadview
+
+""" Buffer Windows
+augroup BufWin
+  autocmd!
+  autocmd BufWinLeave ?* silent mkview
+  autocmd BufWinEnter ?* silent loadview
+augroup END
