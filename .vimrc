@@ -1,39 +1,43 @@
-""" Specify character code
+"=== Specify character code ======================================================
 set encoding=utf-8
 scriptencoding utf-8
 
-""" Disply
+"=== Disply ======================================================
 "set number
 "set list
+set ruler
 set pumheight=10
 set title
 set textwidth=0
 
-""" Mute
+"=== Mute ======================================================
 set t_vb=
-set novisualbell
+set visualbell
+set noerrorbells
 
-""" Color
+"=== Color ======================================================
 set t_Co=256
 set cursorline
 syntax on
-highlight cursorline term=reverse cterm=none ctermbg=236
+set background=dark
+colorscheme solarized
+highlight cursorline term=reverse cterm=none ctermbg=238
 "colorscheme torte
 " set colorcolumn=80
 
 
-""" Search
+"=== Search ======================================================
 set incsearch
 set ignorecase
 set smartcase
 set hlsearch
 
-""" Escape
+"=== Escape ======================================================
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
 
-" Editor
+"=== Editor ======================================================
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
 "set virtualedit=all     " カーソルを文字が存在しない部分でも動けるようにする
@@ -42,36 +46,42 @@ set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバ
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 
-""" Hilight brackets
+"=== Hilight brackets ======================================================
 set matchpairs& matchpairs+=<:>
 
-""" Back space
+"=== Back space ======================================================
 "set backspace=indent,eol,start
 
 
-""" Disable swap
+"=== Disable swap ======================================================
 set nowritebackup
 set nobackup
 set noswapfile
 
 
-""" Tab to space
+"=== Tab to space ======================================================
 set listchars=tab:^\ ,trail:~
 set expandtab
 set shiftwidth=2
 set softtabstop=2
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
-""" Highlight Trailing Spaces
+"=== Mouse ========================================================
+"set mouse=a
+"set ttymouse=xterm2
+
+"=== Highlight Trailing Spaces ======================================================
 augroup HighlightTrailingSpaces
   autocmd!
   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
   autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
 augroup END
 
-""" Buffer Windows
-augroup BufWin
-  autocmd!
-  autocmd BufWinLeave ?* silent mkview
-  autocmd BufWinEnter ?* silent loadview
-augroup END
+"=== Buffer Windows ======================================================
+"autocmd BufWinLeave ?* silent mkview
+"autocmd BufWinEnter ?* silent loadview
+
+
+"=== Debug ======================================================
+" set verbosefile=/tmp/vim.log
+" set verbose=20
