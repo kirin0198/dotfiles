@@ -17,12 +17,17 @@ set noerrorbells
 
 "=== Color ======================================================
 set t_Co=256
-set cursorline
 syntax on
 set background=dark
-colorscheme solarized
-highlight cursorline term=reverse cterm=none ctermbg=238
+
+"--- color scheme list
+"colorscheme solarized
+colorscheme molokai
 "colorscheme torte
+
+"--- highlight cursor line for gray
+set cursorline
+highlight cursorline term=reverse cterm=none ctermbg=238
 " set colorcolumn=80
 
 
