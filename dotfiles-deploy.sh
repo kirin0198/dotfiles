@@ -15,8 +15,12 @@ fi
 
 if [[ -e ~/.bash_config ]]; then
     echo "Already setup. Dir: bash_config"
+    mv -rf ~/dotfiles/.bash_config ~/
 else
-    mkdir ~/.bash_config
+    mv -r ~/dotfiles/.bash_config ~/
 fi
+
+echo "Update .vim directory"
+mv -f ~/.vim ~/
 
 echo "Finish install process!"
