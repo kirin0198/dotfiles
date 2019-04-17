@@ -1,26 +1,32 @@
 #/bin/bash
 
+DIR_LIST[0]=".cache/dein"
+DIR_LIST[1]=".cache/plugins"
+DIR_LIST[2]=".vim/colors"
+DIR_LIST[3]=".bash_config"
+
+FILE_LIST[0]=".vimrc"
+FILE_LIST[1]=".inputrc"
+FILE_LIST[2]=".cache/plugins/plugins.toml"
+FILE_LIST[3]=".cache/plugins/plugins_lazy.toml"
+FILE_LIST[3]=".bash_config/"
+
 echo "Start setup process...."
-if [[ -f ~/.vimrc ]]; then
-    echo "Already setup. File: vimrc"
-else
-    ln -sf ~/dotfiles/.vimrc ~/.vimrc
-fi
 
-if [[ -f ~/.inputrc ]]; then
-    echo "Already setup. File: inputrc"
-else
-    ln -sf ~/dotfiles/.inputrc ~/.inputrc
-fi
+for TARGET_DIR in FILE_LIST[@]; do
+    if [[ -d "$HOME"/"${TARGET_DIR}" ]]; then
+        echo "Already setup. Dir: bash_config"
+    else
+        mkdir -p "$HOME"/"${TARGET_DIR}"
+    fi
+done
 
-if [[ -e ~/.bash_config ]]; then
-    echo "Already setup. Dir: bash_config"
-    mv -rf ~/dotfiles/.bash_config ~/
-else
-    mv -r ~/dotfiles/.bash_config ~/
-fi
-
-echo "Update .vim directory"
-mv -f ~/.vim ~/
+for TARGET_FILE in FILE_LIST[@]; do
+    if [[ -f "$HOME"/"${TARGET_FILE}" ]]; then
+        echo "Already setup. ${TARGET_FILE}"
+    else
+        ln -sf ~/dotfiles/"${TARGET_FILE}" "$HOME"/"${TARGET_FILE}"
+    fi
+done
 
 echo "Finish install process!"
