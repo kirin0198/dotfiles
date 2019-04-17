@@ -2,6 +2,7 @@
 set encoding=utf-8
 scriptencoding utf-8
 
+
 "=== dein =====================================================
 if &compatible
   set nocompatible               " Be iMproved
@@ -31,6 +32,13 @@ if dein#load_state(s:dein_path)
   call dein#load_toml(s:toml,    {'lazy': 0})
   call dein#load_toml(s:lazy_toml,    {'lazy': 1})
 
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
+  let g:deoplete#enable_at_startup = 1
+
   " Let dein manage dein
   " Required:
   "call dein#add('/home/giraffe/.cache/dein/repos/github.com/Shougo/dein.vim')
@@ -57,6 +65,7 @@ endif
 "=== Disply ======================================================
 "set number
 "set list
+set ambiwidth=double
 set ruler
 set pumheight=10
 set title
@@ -101,6 +110,9 @@ set hidden              " バッファを閉じる代わりに隠す（Undo履�
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+
+"=== Command mode ===============================================
+set wildmenu
 
 "=== Hilight brackets ======================================================
 set matchpairs& matchpairs+=<:>

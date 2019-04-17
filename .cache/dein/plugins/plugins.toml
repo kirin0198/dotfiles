@@ -6,3 +6,6 @@
 
 [[plugins]]
   repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+  repo = 'Yggdroot/indentLine'
