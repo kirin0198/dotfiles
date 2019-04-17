@@ -7,7 +7,7 @@ if &compatible
   set nocompatible               " Be iMproved
 endif
 
-let s:dein_path = expand('/home/giraffe/.cache/dein')
+let s:dein_path = expand('$HOME/.cache/dein')
 let s:dein_repo_path = s:dein_path . '/repos/github.com/Shougo/dein.vim'
 
 if &runtimepath !~# '/dein.vim'
