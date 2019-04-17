@@ -163,6 +163,11 @@ endif
 "autocmd BufWinLeave ?* silent mkview
 "autocmd BufWinEnter ?* silent loadview
 
+"=== Buffer line ==================================================
+augroup vimrcEx
+    au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
+      \ exe "normal g`\"" | endif
+augroup END
 
 "=== Debug ======================================================
 " set verbosefile=/tmp/vim.log
