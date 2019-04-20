@@ -76,8 +76,7 @@ set t_vb=
 set visualbell
 set noerrorbells
 
-"=== Color ======================================================
-set t_Co=256
+"=== Colors ======================================================
 set background=dark
 
 "--- color scheme list
@@ -105,7 +104,7 @@ cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 "=== Editor ======================================================
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
-"set virtualedit=all     " カーソルを文字が存在しない部分でも動けるようにする
+set virtualedit=block     " カーソルを文字が存在しない部分でも動けるようにする
 set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
@@ -113,6 +112,7 @@ set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 
 "=== Command mode ===============================================
 set wildmenu
+set wildmode=full
 
 "=== Hilight brackets ======================================================
 set matchpairs& matchpairs+=<:>
@@ -132,7 +132,22 @@ set listchars=tab:^\ ,trail:~
 set expandtab
 set shiftwidth=2
 set softtabstop=2
+
+"=== key mapping ======================================================
+"--- set leader key
+let mapleader="\<Space>"
+"--- move line top
+map H ^
+"--- move line end
+map L $
+noremap j gj
+noremap k gk
+"--- 
+"nnoremap <Leader> :e ~/.vimrc<CR>
+nnoremap <Tab> gt
+nnoremap <S-Tab> gT
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+
 
 "=== Mouse ========================================================
 "set mouse=a
