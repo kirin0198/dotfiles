@@ -1,3 +1,20 @@
+"
+"               ,---,        ,'  , `.,-.----.     ,----..
+"       ,---.,`--.' |     ,-+-,.' _ |\    /  \   /   /   \
+"      /__./||   :  :  ,-+-. ;   , ||;   :    \ |   :     :
+" ,---.;  ; |:   |  ' ,--.'|'   |  ;||   | .\ : .   |  ;. /
+"/___/ \  | ||   :  ||   |  ,', |  ':.   : |: | .   ; /--`
+"\   ;  \ ' |'   '  ;|   | /  | |  |||   |  \ : ;   | ;
+" \   \  \: ||   |  |'   | :  | :  |,|   : .  / |   : |
+"  ;   \  ' .'   :  ;;   . |  ; |--' ;   | |  \ .   | '___
+"   \   \   '|   |  '|   : |  | ,    |   | ;\  \'   ; : .'|
+"    \   `  ;'   :  ||   : '  |/     :   ' | \.''   | '/  :
+"     :   \ |;   |.' ;   | |`-'      :   : :-'  |   :    /
+"      '---" '---'   |   ;/          |   |.'     \   \ .'
+"                    '---'           `---'        `---`
+
+
+
 "=== Specify character code ======================================================
 set encoding=utf-8
 scriptencoding utf-8
@@ -63,7 +80,7 @@ endif
 
 
 "=== Disply ======================================================
-"set number
+set number
 "set list
 set ambiwidth=double
 set ruler
@@ -79,14 +96,14 @@ set noerrorbells
 "=== Colors ======================================================
 set background=dark
 
-"--- color scheme list
+" color scheme list
 "colorscheme solarized
 colorscheme molokai
 "colorscheme torte
 
-"--- highlight cursor line for gray
+" highlight cursor line for gray
 set cursorline
-highlight cursorline term=reverse cterm=none ctermbg=238
+highlight cursorline term=reverse cterm=none ctermbg=236
 " set colorcolumn=80
 
 
@@ -104,7 +121,7 @@ cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 "=== Editor ======================================================
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
-set virtualedit=block     " カーソルを文字が存在しない部分でも動けるようにする
+set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
 set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
@@ -134,20 +151,37 @@ set shiftwidth=2
 set softtabstop=2
 
 "=== key mapping ======================================================
-"--- set leader key
+" set leader key
 let mapleader="\<Space>"
-"--- move line top
+
+" move line top
 map H ^
-"--- move line end
+" move line end
 map L $
 noremap j gj
 noremap k gk
-"--- 
-"nnoremap <Leader> :e ~/.vimrc<CR>
+" open .vimrc
+nnoremap <Leader>. :e ~/.vimrc<CR>
+
+" オペレーターモード中にカッコ内を対象にする
+onoremap 8 i(
+onoremap 2 i"
+onoremap 7 i'
+onoremap @ i`
+onoremap [ i[
+onoremap { i{
+
+" Show relative lines
+nnoremap <silent> <Leader>n :set relativenumber!<CR>
+
+" replace strings shortcut
+nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
 nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
+" enable backspace
+set backspace=indent,eol,start
 
 "=== Mouse ========================================================
 "set mouse=a
