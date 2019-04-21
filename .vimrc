@@ -171,6 +171,10 @@ onoremap @ i`
 onoremap [ i[
 onoremap { i{
 
+" Ctrl-j,Ctrl-k,jump to blank line
+nnoremap <C-j> }
+nnoremap <C-k> {
+
 " Show relative lines
 nnoremap <silent> <Leader>n :set relativenumber!<CR>
 
