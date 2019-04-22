@@ -19,6 +19,8 @@
 set encoding=utf-8
 scriptencoding utf-8
 
+"
+let g:python3_host_prog=expand('/usr/bin/python3.6')
 
 "=== dein =====================================================
 if &compatible
@@ -49,11 +51,6 @@ if dein#load_state(s:dein_path)
   call dein#load_toml(s:toml,    {'lazy': 0})
   call dein#load_toml(s:lazy_toml,    {'lazy': 1})
 
-  call dein#add('Shougo/deoplete.nvim')
-  if !has('nvim')
-    call dein#add('roxma/nvim-yarp')
-    call dein#add('roxma/vim-hug-neovim-rpc')
-  endif
   let g:deoplete#enable_at_startup = 1
 
   " Let dein manage dein
@@ -161,7 +158,7 @@ map L $
 noremap j gj
 noremap k gk
 " open .vimrc
-nnoremap <Leader>. :e ~/.vimrc<CR>
+nnoremap <Leader>. :vs ~/.vimrc<CR>
 
 " オペレーターモード中にカッコ内を対象にする
 onoremap 8 i(
@@ -180,9 +177,13 @@ nnoremap <silent> <Leader>n :set relativenumber!<CR>
 
 " replace strings shortcut
 nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
+
 nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+
+" Tab
+nnoremap <Leader>t :tabnew<CR>
 
 " enable backspace
 set backspace=indent,eol,start
@@ -190,6 +191,10 @@ set backspace=indent,eol,start
 "=== Mouse ========================================================
 "set mouse=a
 "set ttymouse=xterm2
+
+"=== Window ========================================================
+set splitright
+set splitbelow
 
 "=== Highlight Trailing Spaces ======================================================
 augroup HighlightTrailingSpaces
