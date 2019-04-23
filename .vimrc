@@ -111,6 +111,12 @@ set cursorline
 highlight cursorline term=reverse cterm=none ctermbg=236
 " set colorcolumn=80
 
+" airline setting (need powerline)
+let g:airline_powerline_fonts = 1
+set laststatus=2
+let g:airline_theme = 'molokai'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 "=== Search ======================================================
 set incsearch
