@@ -21,3 +21,6 @@
 
 [[plugins]]
   repo = 'prabirshrestha/vim-lsp'
+
+[[plugins]]
+  repo = 't9md/vim-quickhl'

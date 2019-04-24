@@ -51,6 +51,12 @@ if dein#load_state(s:dein_path)
   call dein#load_toml(s:toml,    {'lazy': 0})
   call dein#load_toml(s:lazy_toml,    {'lazy': 1})
 
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
+
   let g:deoplete#enable_at_startup = 1
 
   " Let dein manage dein
@@ -112,7 +118,7 @@ highlight cursorline term=reverse cterm=none ctermbg=236
 " set colorcolumn=80
 
 " airline setting (need powerline)
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 set laststatus=2
 let g:airline_theme = 'molokai'
 let g:airline#extensions#tabline#enabled = 1
