@@ -11,10 +11,7 @@
   repo = 'Yggdroot/indentLine'
 
 [[plugins]]
-  repo = 'vim-airline/vim-airline'
-
-[[plugins]]
-  repo = 'vim-airline/vim-airline-themes'
+  repo = 'itchyny/lightline.vim'
 
 [[plugins]]
   repo = 'prabirshrestha/async.vim'
@@ -24,3 +21,9 @@
 
 [[plugins]]
   repo = 't9md/vim-quickhl'
+
+[[plugins]]
+  repo = 'cohama/lexima.vim'
+
+[[plugins]]
+  repo = 'simeji/winresizer'

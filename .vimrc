@@ -99,6 +99,12 @@ set pumheight=10
 set title
 set textwidth=0
 
+let g:netrw_liststyle=1
+let g:netrw_banner=0
+let g:netrw_sizestyle="H"
+let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
+let g:netrw_preview=1
+
 "=== Mute ======================================================
 set t_vb=
 set visualbell
@@ -117,12 +123,23 @@ set cursorline
 highlight cursorline term=reverse cterm=none ctermbg=236
 " set colorcolumn=80
 
+set laststatus=2
+
 " airline setting (need powerline)
 "let g:airline_powerline_fonts = 1
-set laststatus=2
-let g:airline_theme = 'molokai'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+"let g:airline_theme = 'molokai'
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+" lightline setting
+if !has('gui_running')
+  set t_Co=256
+endif
+
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'seoul256',
+      \ }
 
 "=== Search ======================================================
 set incsearch
