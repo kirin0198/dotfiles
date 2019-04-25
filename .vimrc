@@ -219,8 +219,15 @@ nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
+" Directory Tree for NERDTree
+nnoremap <silent><C-t> :NERDTreeToggle<CR>
+let NERDTreeShowHidden = 1 " Disply hidden file
+
 " Tab
 nnoremap <Leader>t :tabnew<CR>
+
+" Move
+nnoremap <Leader>w <C-w><C-w><CR>
 
 " enable backspace
 set backspace=indent,eol,start
