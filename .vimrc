@@ -189,8 +189,8 @@ set noswapfile
 "=== Tab to space ======================================================
 set listchars=tab:^\ ,trail:~
 set expandtab
-set shiftwidth=2
-set softtabstop=2
+set shiftwidth=4
+set softtabstop=4
 
 "=== key mapping ======================================================
 " set leader key
