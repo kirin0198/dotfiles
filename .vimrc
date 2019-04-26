@@ -223,8 +223,6 @@ nnoremap <silent> <Leader>n :set relativenumber!<CR>
 " replace strings shortcut
 nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
 
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
 " Directory Tree for NERDTree
@@ -233,9 +231,18 @@ nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
 " Tab
 nnoremap <Leader>t :tabnew<CR>
+nnoremap <Tab> gt
+nnoremap <S-Tab> gT
 
-" Move
-nnoremap <Leader>w <C-w><C-w><CR>
+" Move screen
+nnoremap <Leader>ww <C-w>w
+nnoremap <Leader>wl <C-w>l
+nnoremap <Leader>wh <C-w>h
+nnoremap <Leader>wk <C-w>k
+nnoremap <Leader>wj <C-w>j
+
+" Open terminal
+nnoremap <silent> <Leader>te :terminal<CR>
 
 " enable backspace
 set backspace=indent,eol,start
