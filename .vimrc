@@ -240,6 +240,13 @@ nnoremap <Leader>w <C-w><C-w><CR>
 " enable backspace
 set backspace=indent,eol,start
 
+" Git
+nnoremap <Leader>gd :Gdiff<CR>
+nnoremap <Leader>gb :Gblame<CR>
+nmap ]h <Plug>GitGutterNextHunk
+nmap [h <Plug>GitGutterPrevHunk
+
+
 "=== Mouse ========================================================
 "set mouse=a
 "set ttymouse=xterm2
