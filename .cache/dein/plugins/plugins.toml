@@ -27,6 +27,3 @@
 
 [[plugins]]
   repo = 'simeji/winresizer'
-
-[[plugins]]
-  repo = 'scrooloose/nerdtree'
