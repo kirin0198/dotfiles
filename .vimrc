@@ -15,14 +15,17 @@
 
 
 
-"=== Specify character code ======================================================
+"=======================================================================
+"=== Specify character code ============================================
+"=======================================================================
 set encoding=utf-8
 scriptencoding utf-8
 
-"
 let g:python3_host_prog=expand('/usr/bin/python3.6')
 
-"=== dein =====================================================
+"=======================================================================
+"=== dein ==============================================================
+"=======================================================================
 if &compatible
   set nocompatible               " Be iMproved
 endif
@@ -38,9 +41,6 @@ if &runtimepath !~# '/dein.vim'
 endif
 
 " Required:
-"set runtimepath+=/home/giraffe/.cache/dein/repos/github.com/Shougo/dein.vim
-
-" Required:
 if dein#load_state(s:dein_path)
   call dein#begin(s:dein_path)
 
@@ -51,6 +51,7 @@ if dein#load_state(s:dein_path)
   call dein#load_toml(s:toml,    {'lazy': 0})
   call dein#load_toml(s:lazy_toml,    {'lazy': 1})
 
+  " Call deoplete
   call dein#add('Shougo/deoplete.nvim')
   if !has('nvim')
     call dein#add('roxma/nvim-yarp')
@@ -81,7 +82,9 @@ if dein#check_install()
   call dein#install()
 endif
 
-"=== Bash Language server ==============================================
+"=======================================================================
+"=== Language server ===================================================
+"=======================================================================
 if executable('bash-language-server')
   au User lsp_setup call lsp#register_server({
         \ 'name': 'bash-language-server',
@@ -90,7 +93,9 @@ if executable('bash-language-server')
         \ })
 endif
 
-"=== Disply ======================================================
+"=======================================================================
+"=== Visual ======================================================
+"=======================================================================
 set number
 "set list
 set ambiwidth=double
@@ -105,12 +110,7 @@ let g:netrw_sizestyle="H"
 let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
 let g:netrw_preview=1
 
-"=== Mute ======================================================
-set t_vb=
-set visualbell
-set noerrorbells
-
-"=== Colors ======================================================
+" Colors
 set background=dark
 
 " color scheme list
@@ -140,6 +140,11 @@ set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ }
+
+"=== Mute ======================================================
+set t_vb=
+set visualbell
+set noerrorbells
 
 "=== Search ======================================================
 set incsearch
@@ -206,16 +211,16 @@ noremap k gk
 nnoremap <Leader>. :vs ~/.vimrc<CR>
 
 " オペレーターモード中にカッコ内を対象にする
-onoremap 8 i(
-onoremap 2 i"
-onoremap 7 i'
-onoremap @ i`
+onoremap 9 i(
+onoremap " i"
+onoremap ' i'
+onoremap ` i`
 onoremap [ i[
 onoremap { i{
 
 " Ctrl-j,Ctrl-k,jump to blank line
-nnoremap <C-j> }
-nnoremap <C-k> {
+nnoremap <S-j> }
+nnoremap <S-k> {
 
 " Show relative lines
 nnoremap <silent> <Leader>n :set relativenumber!<CR>
@@ -235,14 +240,18 @@ nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 
 " Move screen
-nnoremap <Leader>ww <C-w>w
-nnoremap <Leader>wl <C-w>l
-nnoremap <Leader>wh <C-w>h
-nnoremap <Leader>wk <C-w>k
-nnoremap <Leader>wj <C-w>j
+nnoremap <Leader>sw <C-w>w
+nnoremap <Leader>sl <C-w>l
+nnoremap <Leader>sh <C-w>h
+nnoremap <Leader>sk <C-w>k
+nnoremap <Leader>sj <C-w>j
 
 " Open terminal
 nnoremap <silent> <Leader>te :terminal<CR>
+
+" terminal mode
+tnoremap <C-o> <C-w>
+tnoremap <C-k> <C-w>:q!<CR>
 
 " enable backspace
 set backspace=indent,eol,start
@@ -250,9 +259,13 @@ set backspace=indent,eol,start
 " Git
 nnoremap <Leader>gd :Gdiff<CR>
 nnoremap <Leader>gb :Gblame<CR>
-nmap ]h <Plug>GitGutterNextHunk
-nmap [h <Plug>GitGutterPrevHunk
+nnoremap <Leader>g[ <Plug>GitGutterNextHunk
+nnoremap <Leader>g] <Plug>GitGutterPrevHunk
 
+" File
+nnoremap <Leader>q :q<CR>
+nnoremap <Leader>q1 :q!<CR>
+nnoremap <Leader>w :w<CR>
 
 "=== Mouse ========================================================
 "set mouse=a
