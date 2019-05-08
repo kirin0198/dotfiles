@@ -263,9 +263,10 @@ nnoremap <Leader>g[ <Plug>GitGutterNextHunk
 nnoremap <Leader>g] <Plug>GitGutterPrevHunk
 
 " File
-nnoremap <Leader>q :q<CR>
+nnoremap <Leader>qq :q<CR>
 nnoremap <Leader>q1 :q!<CR>
-nnoremap <Leader>w :w<CR>
+nnoremap <Leader>ww :w<CR>
+nnoremap <Leader>wq :wq<CR>
 
 "=== Mouse ========================================================
 "set mouse=a
