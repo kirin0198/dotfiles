@@ -209,6 +209,7 @@ noremap j gj
 noremap k gk
 " open .vimrc
 nnoremap <Leader>. :vs ~/.vimrc<CR>
+nnoremap <Leader>, :vs ~/.cache/dein/plugins/plugins.toml<CR>
 
 " オペレーターモード中にカッコ内を対象にする
 onoremap 9 i(
@@ -235,7 +236,7 @@ nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 "let NERDTreeShowHidden = 1 " Disply hidden file
 
 " Tab
-nnoremap <Leader>t :tabnew<CR>
+nnoremap <Leader>tn :tabnew<CR>
 nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 
