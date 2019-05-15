@@ -232,8 +232,8 @@ nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
 " Directory Tree for NERDTree
-"nnoremap <silent><C-t> :NERDTreeToggle<CR>
-"let NERDTreeShowHidden = 1 " Disply hidden file
+nnoremap <silent><Leader>t :NERDTreeToggle<CR>
+let NERDTreeShowHidden = 1 " Disply hidden file
 
 " Tab
 nnoremap <Leader>tn :tabnew<CR>
