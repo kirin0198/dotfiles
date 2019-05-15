@@ -260,8 +260,8 @@ set backspace=indent,eol,start
 " Git
 nnoremap <Leader>gd :Gdiff<CR>
 nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>g[ <Plug>GitGutterNextHunk
-nnoremap <Leader>g] <Plug>GitGutterPrevHunk
+nnoremap <Leader>g] :GitGutterNextHunk<CR>
+nnoremap <Leader>g[ :GitGutterPrevHunk<CR>
 
 " File
 nnoremap <Leader>qq :q<CR>
