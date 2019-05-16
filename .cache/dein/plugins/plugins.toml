@@ -39,3 +39,10 @@
 
 [[plugins]]
   repo = 'scrooloose/syntastic'
+
+[[plugins]]
+  repo = 'junegunn/fzf'
+  build = './install --all'
+
+[[plugins]]
+  repo = 'junegunn/fzf.vim'

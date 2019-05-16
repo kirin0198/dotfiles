@@ -173,6 +173,10 @@ if has('persistent_undo')
 endif
 " log level
 set undolevels=1000
+" fzf variables
+let g:fzf_action = {
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
 
 "=== Command mode ===============================================
 set wildmenu
@@ -181,15 +185,10 @@ set wildmode=full
 "=== Hilight brackets ======================================================
 set matchpairs& matchpairs+=<:>
 
-"=== Back space ======================================================
-"set backspace=indent,eol,start
-
-
 "=== Disable swap ======================================================
 set nowritebackup
 set nobackup
 set noswapfile
-
 
 "=== Tab to space ======================================================
 set listchars=tab:^\ ,trail:~
@@ -209,7 +208,7 @@ noremap j gj
 noremap k gk
 " open .vimrc
 nnoremap <Leader>. :vs ~/.vimrc<CR>
-nnoremap <Leader>, :vs ~/.cache/dein/plugins/plugins.toml<CR>
+nnoremap <Leader>, :split ~/.cache/dein/plugins/plugins.toml<CR>
 
 " オペレーターモード中にカッコ内を対象にする
 onoremap 9 i(
@@ -258,12 +257,15 @@ tnoremap <C-k> <C-w>:q!<CR>
 set backspace=indent,eol,start
 
 " Git
-nnoremap <Leader>gd :Gdiff<CR>
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>g] :GitGutterNextHunk<CR>
-nnoremap <Leader>g[ :GitGutterPrevHunk<CR>
+nnoremap <silent> <Leader>gf :GFiles<CR>
+nnoremap <silent> <Leader>gs :GFiles?<CR>
+nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>g] :GitGutterNextHunk<CR>
+nnoremap <silent> <Leader>g[ :GitGutterPrevHunk<CR>
 
 " File
+nnoremap <Leader>fo :Files<CR>
 nnoremap <Leader>qq :q<CR>
 nnoremap <Leader>q1 :q!<CR>
 nnoremap <Leader>ww :w<CR>
