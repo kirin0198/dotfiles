@@ -138,8 +138,15 @@ endif
 
 set noshowmode
 let g:lightline = {
-      \ 'colorscheme': 'seoul256',
-      \ }
+    \ 'colorscheme': 'seoul256',
+    \ 'active': {
+    \     'left': [ [ 'mode', 'paste' ],
+    \               [ 'gitbranch', 'readonly', 'filename', 'modified', ] ]
+    \ },
+    \ 'component_function': {
+    \     'gitbranch': 'fugitive#head'
+    \ }
+    \ }
 
 "=== Mute ======================================================
 set t_vb=
