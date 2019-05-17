@@ -46,3 +46,6 @@
 
 [[plugins]]
   repo = 'junegunn/fzf.vim'
+
+[[plugins]]
+  repo = 'thinca/vim-showtime'
