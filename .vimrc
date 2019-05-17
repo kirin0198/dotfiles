@@ -273,7 +273,7 @@ nnoremap <silent> <Leader>g[ :GitGutterPrevHunk<CR>
 
 " File
 nnoremap <Leader>fo :Files<CR>
-nnoremap <Leader>qq :q<CR>
+nnoremap qq :q<CR>
 nnoremap <Leader>q1 :q!<CR>
 nnoremap <Leader>ww :w<CR>
 nnoremap <Leader>wq :wq<CR>
