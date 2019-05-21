@@ -125,6 +125,11 @@ highlight cursorline term=reverse cterm=none ctermbg=236
 
 set laststatus=2
 
+" GitGutter
+let g:gitgutter_sign_added = '✚'
+let g:gitgutter_sign_modified = '➜'
+let g:gitgutter_sign_removed = '✘'
+
 " airline setting (need powerline)
 "let g:airline_powerline_fonts = 1
 "let g:airline_theme = 'molokai'
@@ -141,12 +146,62 @@ let g:lightline = {
     \ 'colorscheme': 'seoul256',
     \ 'active': {
     \     'left': [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'gitgutter', 'readonly', 'filename', 'modified', ] ]
+    \               [ 'fugitive', 'gitgutter' ],
+    \               [ 'readonly', 'filename', 'modified', 'syntastic' ] ]
     \ },
     \ 'component_function': {
-    \     'gitbranch': 'fugitive#head'
+    \     'fugitive': 'MyFugitive',
+    \     'gitgutter': 'MyGitGutter'
+    \ },
+    \ 'component_expand': {
+    \     'syntastic': 'SyntasticStatuslineFlag'
+    \ },
+    \ 'component_type': {
+    \     'syntastic': 'error'
     \ }
     \ }
+
+let g:syntastic_mode_map = { 'mode': 'passive' }
+augroup AutoSyntastic
+  autocmd!
+  autocmd BufWritePost *.vim call s:syntastic()
+augroup END
+function! s:syntastic()
+  SyntasticCheck
+  call lightline#update()
+endfunction
+
+function! MyFugitive()
+  try
+    if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+      let _ = fugitive#head()
+      return strlen(_) ? '⭠ '._ : ''
+    endif
+  catch
+  endtry
+  return ''
+endfunction
+
+function! MyGitGutter()
+  if ! exists('*GitGutterGetHunkSummary')
+        \ || ! get(g:, 'gitgutter_enabled', 0)
+        \ || winwidth('.') <= 90
+    return ''
+  endif
+  let symbols = [
+        \ g:gitgutter_sign_added . ' ',
+        \ g:gitgutter_sign_modified . ' ',
+        \ g:gitgutter_sign_removed . ' '
+        \ ]
+  let hunks = GitGutterGetHunkSummary()
+  let ret = []
+  for i in [0, 1, 2]
+    if hunks[i] > 0
+      call add(ret, symbols[i] . hunks[i])
+    endif
+  endfor
+  return join(ret, ' ')
+endfunction
 
 "=== Mute ======================================================
 set t_vb=
@@ -277,6 +332,8 @@ nnoremap qq :q<CR>
 nnoremap <Leader>q1 :q!<CR>
 nnoremap <Leader>ww :w<CR>
 nnoremap <Leader>wq :wq<CR>
+nnoremap <Leader>vs :vs<CR>
+nnoremap <Leader>bn :bn<CR>
 
 "=== Mouse ========================================================
 "set mouse=a
