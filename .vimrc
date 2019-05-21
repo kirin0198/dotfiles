@@ -146,10 +146,14 @@ let g:lightline = {
     \ 'colorscheme': 'seoul256',
     \ 'active': {
     \     'left': [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'gitgutter' ],
-    \               [ 'readonly', 'filename', 'modified', 'syntastic' ] ]
+    \               [ 'fugitive', 'gitgutter', 'readonly', 'filename' ],
+    \               [ 'modified', 'syntastic' ] ]
+    \ },
+    \ 'component': {
+    \     'lineinfo': '%3l:%-2v',
     \ },
     \ 'component_function': {
+    \     'readonly': 'MyReadonly',
     \     'fugitive': 'MyFugitive',
     \     'gitgutter': 'MyGitGutter'
     \ },
@@ -160,6 +164,10 @@ let g:lightline = {
     \     'syntastic': 'error'
     \ }
     \ }
+
+function! MyReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
+endfunction
 
 let g:syntastic_mode_map = { 'mode': 'passive' }
 augroup AutoSyntastic
@@ -175,7 +183,7 @@ function! MyFugitive()
   try
     if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
       let _ = fugitive#head()
-      return strlen(_) ? '⭠ '._ : ''
+      return strlen(_) ? ''._ : ''
     endif
   catch
   endtry
