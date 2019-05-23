@@ -344,8 +344,8 @@ nnoremap <Leader>wq :wq<CR>
 nnoremap <Leader>vs :vs<CR>
 nnoremap <Leader>bn :bn<CR>
 
-nnoremap <Leader>p
-nnoremap <Leader>P
+nnoremap <Leader>p "0p
+nnoremap <Leader>P "0p
 
 "=== Mouse ========================================================
 "set mouse=a
