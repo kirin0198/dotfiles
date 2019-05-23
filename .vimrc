@@ -251,7 +251,6 @@ let g:fzf_action = {
 "=== Command mode ===============================================
 set wildmenu
 set wildmode=full
-set nocompatible
 
 "=== Hilight brackets ======================================================
 set matchpairs& matchpairs+=<:>
