@@ -251,6 +251,7 @@ let g:fzf_action = {
 "=== Command mode ===============================================
 set wildmenu
 set wildmode=full
+set nocompatible
 
 "=== Hilight brackets ======================================================
 set matchpairs& matchpairs+=<:>
@@ -342,6 +343,9 @@ nnoremap <Leader>ww :w<CR>
 nnoremap <Leader>wq :wq<CR>
 nnoremap <Leader>vs :vs<CR>
 nnoremap <Leader>bn :bn<CR>
+
+nnoremap <Leader>p
+nnoremap <Leader>P
 
 "=== Mouse ========================================================
 "set mouse=a
