@@ -52,10 +52,15 @@ if dein#load_state(s:dein_path)
   call dein#load_toml(s:lazy_toml,    {'lazy': 1})
 
   " Call deoplete
-  call dein#add('Shougo/deoplete.nvim')
-  if !has('nvim')
-    call dein#add('roxma/nvim-yarp')
-    call dein#add('roxma/vim-hug-neovim-rpc')
+  if ((has('nvim')  || has('timers')) && has('python3')) && system('pip3 show neovim') !=# ''
+    call dein#add('Shougo/deoplete.nvim')
+    call dein#add('Shougo/neco-vim')
+    call dein#add('Shougo/neco-syntax')
+    call dein#add('ujihisa/neco-look')
+    if !has('nvim')
+        call dein#add('roxma/nvim-yarp')
+        call dein#add('roxma/vim-hug-neovim-rpc')
+    endif
   endif
 
   let g:deoplete#enable_at_startup = 1
@@ -82,16 +87,19 @@ if dein#check_install()
   call dein#install()
 endif
 
+" set deoplete
+if dein#tap('deoplete.nvim')
+  let g:deoplete#enable_at_startup = 1
+elseif dein#tap('neocomplete.vim')
+  let g:neocomplete#enable_at_startup = 1
+endif
+
 "=======================================================================
 "=== Language server ===================================================
 "=======================================================================
-if executable('bash-language-server')
-  au User lsp_setup call lsp#register_server({
-        \ 'name': 'bash-language-server',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
-        \ 'whitelist': ['sh'],
-        \ })
-endif
+let g:LanguageClient_serverCommands = {
+    \ 'sh': ['bash-language-server', 'start']
+    \ }
 
 "=======================================================================
 "=== Visual ======================================================

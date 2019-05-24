@@ -49,3 +49,8 @@
 
 [[plugins]]
   repo = 'thinca/vim-showtime'
+
+[[plugins]]
+  repo = 'autozimu/LanguageClient-neovim'
+  rev = 'next'
+  build = 'bash install.sh'
