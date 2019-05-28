@@ -230,11 +230,6 @@ set ignorecase
 set smartcase
 set hlsearch
 
-"=== Escape ======================================================
-cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
-cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
-
-
 "=== Editor ======================================================
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
@@ -243,6 +238,9 @@ set virtualedit=block   " カーソルを文字が存在しない部分でも動
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+
+" enable backspace
+set backspace=indent,eol,start
 
 " Undo,Redo
 if has('persistent_undo')
@@ -278,25 +276,21 @@ set softtabstop=4
 " set leader key
 let mapleader="\<Space>"
 
+" General keymap
 " move line top
 map H ^
 " move line end
 map L $
+
+" Nomal mode keymap
+" Move display line
 noremap j gj
 noremap k gk
 " open .vimrc
 nnoremap <Leader>. :vs ~/.vimrc<CR>
 nnoremap <Leader>, :split ~/.cache/dein/plugins/plugins.toml<CR>
 
-" オペレーターモード中にカッコ内を対象にする
-onoremap 9 i(
-onoremap " i"
-onoremap ' i'
-onoremap ` i`
-onoremap [ i[
-onoremap { i{
-
-" Ctrl-j,Ctrl-k,jump to blank line
+" Shift-j,Shift-k,jump to blank line
 nnoremap <S-j> }
 nnoremap <S-k> {
 
@@ -327,14 +321,7 @@ nnoremap <Leader>sj <C-w>j
 " Open terminal
 nnoremap <silent> <Leader>te :terminal<CR>
 
-" terminal mode
-tnoremap <C-o> <C-w>
-tnoremap <C-k> <C-w>:q!<CR>
-
-" enable backspace
-set backspace=indent,eol,start
-
-" Git
+" Git keymap
 nnoremap <silent> <Leader>gf :GFiles<CR>
 nnoremap <silent> <Leader>gs :GFiles?<CR>
 nnoremap <silent> <Leader>gd :Gdiff<CR>
@@ -353,6 +340,22 @@ nnoremap <Leader>bn :bn<CR>
 
 nnoremap <Leader>p "0p
 nnoremap <Leader>P "0p
+
+" terminal mode keymap
+tnoremap <C-o> <C-w>
+tnoremap <C-k> <C-w>:q!<CR>
+
+" Operator mode keymap
+onoremap 9 i(
+onoremap " i"
+onoremap ' i'
+onoremap ` i`
+onoremap [ i[
+onoremap { i{
+
+" Command mode keymap
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
 "=== Mouse ========================================================
 "set mouse=a
