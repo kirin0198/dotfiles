@@ -70,7 +70,8 @@ if dein#load_state(s:dein_path)
   "call dein#add('/home/giraffe/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here like this:
-  "call dein#add('Shougo/neosnippet.vim')
+  call dein#add('Shougo/neosnippet.vim')
+  let g:neosnippet#enable_snipmate_compatibility = 1
   "call dein#add('Shougo/neosnippet-snippets')
 
   " Required:
