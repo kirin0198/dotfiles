@@ -91,8 +91,6 @@ endif
 " set deoplete
 if dein#tap('deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
-elseif dein#tap('neocomplete.vim')
-  let g:neocomplete#enable_at_startup = 1
 endif
 
 "=======================================================================
@@ -100,6 +98,37 @@ endif
 "=======================================================================
 let g:LanguageClient_serverCommands = {
     \ 'sh': ['bash-language-server', 'start']
+    \ }
+
+"=======================================================================
+"=== Editor ============================================================
+"=======================================================================
+set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
+set infercase           " 補完時に大文字小文字を区別しない
+set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
+"set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
+set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
+set showmatch           " 対応する括弧などをハイライト表示する
+set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+
+" enable backspace
+set backspace=indent,eol,start
+
+" Undo,Redo
+if has('persistent_undo')
+  set undodir=~/.vim/undo
+  set undofile
+endif
+" log level
+set undolevels=1000
+" fzf variables
+let g:fzf_action = {
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+" set syntastic
+let g:syntastic_mode_map = {
+    \ 'mode': 'passive',
+    \ 'active_filetypes': ['sh', 'py', 'vim' ]
     \ }
 
 "=======================================================================
@@ -178,10 +207,9 @@ function! MyReadonly()
   return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
 endfunction
 
-let g:syntastic_mode_map = { 'mode': 'passive' }
 augroup AutoSyntastic
   autocmd!
-  autocmd BufWritePost *.vim call s:syntastic()
+  autocmd BufWritePost *.vim,*.sh,*.py call s:syntastic()
 augroup END
 function! s:syntastic()
   SyntasticCheck
@@ -230,30 +258,6 @@ set incsearch
 set ignorecase
 set smartcase
 set hlsearch
-
-"=== Editor ======================================================
-set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
-set infercase           " 補完時に大文字小文字を区別しない
-set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
-"set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
-set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
-set showmatch           " 対応する括弧などをハイライト表示する
-set matchtime=3         " 対応括弧のハイライト表示を3秒にする
-
-" enable backspace
-set backspace=indent,eol,start
-
-" Undo,Redo
-if has('persistent_undo')
-  set undodir=~/.vim/undo
-  set undofile
-endif
-" log level
-set undolevels=1000
-" fzf variables
-let g:fzf_action = {
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
 
 "=== Command mode ===============================================
 set wildmenu
@@ -340,7 +344,14 @@ nnoremap <Leader>vs :vs<CR>
 nnoremap <Leader>bn :bn<CR>
 
 nnoremap <Leader>p "0p
-nnoremap <Leader>P "0p
+nnoremap <Leader>P "0P
+
+" Insert mode keymap
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+inoremap <C-c> <Esc>
 
 " terminal mode keymap
 tnoremap <C-o> <C-w>
