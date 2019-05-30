@@ -44,12 +44,12 @@ endif
 if dein#load_state(s:dein_path)
   call dein#begin(s:dein_path)
 
-  let g:config_dir  = expand('$HOME/.cache/dein/plugins')
-  let s:toml        = g:config_dir . '/plugins.toml'
-  let s:lazy_toml   = g:config_dir . '/plugins_lazy.toml'
+  "let g:config_dir  = expand('$HOME/.cache/dein/plugins')
+  "let s:toml        = g:config_dir . '/plugins.toml'
+  "let s:lazy_toml   = g:config_dir . '/plugins_lazy.toml'
 
-  call dein#load_toml(s:toml,    {'lazy': 0})
-  call dein#load_toml(s:lazy_toml,    {'lazy': 1})
+  "call dein#load_toml(s:toml,    {'lazy': 0})
+  "call dein#load_toml(s:lazy_toml,    {'lazy': 1})
 
   " Call deoplete
   if ((has('nvim')  || has('timers')) && has('python3')) && system('pip3 show neovim') !=# ''
@@ -72,7 +72,38 @@ if dein#load_state(s:dein_path)
   " Add or remove your plugins here like this:
   call dein#add('Shougo/neosnippet.vim')
   let g:neosnippet#enable_snipmate_compatibility = 1
+  let g:neosnippet#snippets_directory='~/.vim/dein/vim-snippets/snippets'
   "call dein#add('Shougo/neosnippet-snippets')
+
+  " VisualPlug
+  call dein#add('itchyny/lightline.vim') "edit status line
+  call dein#add('thinca/vim-showtime') "slid display
+  call dein#add('simeji/winresizer') "move window
+  call dein#add('Yggdroot/indentLine') "display indent line
+  call dein#add('t9md/vim-quickhl') "Highlight multiple search
+
+  " LSPPlug
+  call dein#add('prabirshrestha/async.vim')
+  call dein#add('prabirshrestha/vim-lsp')
+  call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
+
+  " EditorPlug
+  call dein#add('cohama/lexima.vim') "Auto close parentheses and repeat by dot
+  call dein#add('scrooloose/nerdtree') "Open file tree
+  call dein#add('tomtom/tcomment_vim') "Auto comment out by gcc
+  call dein#add('tpope/vim-surround') "Auto close parenthesis by S of when selecting  in visual mode
+  call dein#add('scrooloose/syntastic') "Check for syntax
+
+  " FileSearch
+  call dein#add('junegunn/fzf', {'build': './install --all'})
+  call dein#add('junegunn/fzf.vim')
+
+  " GitPlug
+  call dein#add('airblade/vim-gitgutter')
+  call dein#add('tpope/vim-fugitive')
+
+  " AnsibleVault plug
+  call dein#add('thiagoalmeidasa/vim-ansible-vault')
 
   " Required:
   call dein#end()
@@ -345,6 +376,12 @@ nnoremap <Leader>bn :bn<CR>
 
 nnoremap <Leader>p "0p
 nnoremap <Leader>P "0P
+
+" QuickhighlightPlug
+nmap <Leader>m <Plug>(quickhl-manual-this)
+xmap <Leader>m <Plug>(quickhl-manual-this)
+nmap <Leader>M <Plug>(quickhl-manual-reset)
+xmap <Leader>M <Plug>(quickhl-manual-reset)
 
 " Insert mode keymap
 inoremap <C-j> <Down>
