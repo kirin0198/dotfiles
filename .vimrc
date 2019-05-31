@@ -71,9 +71,9 @@ if dein#load_state(s:dein_path)
 
   " Add or remove your plugins here like this:
   call dein#add('Shougo/neosnippet.vim')
+  call dein#add('Shougo/neosnippet-snippets')
   let g:neosnippet#enable_snipmate_compatibility = 1
   let g:neosnippet#snippets_directory='~/.vim/dein/vim-snippets/snippets'
-  "call dein#add('Shougo/neosnippet-snippets')
 
   " VisualPlug
   call dein#add('itchyny/lightline.vim') "edit status line
@@ -142,6 +142,16 @@ set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバ
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 
+" Search
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+
+" Command mode
+set wildmenu
+set wildmode=full
+
 " enable backspace
 set backspace=indent,eol,start
 
@@ -162,8 +172,9 @@ let g:syntastic_mode_map = {
     \ 'active_filetypes': ['sh', 'py', 'vim' ]
     \ }
 
+
 "=======================================================================
-"=== Visual ======================================================
+"=== Visual ============================================================
 "=======================================================================
 set number
 "set list
@@ -172,6 +183,7 @@ set ruler
 set pumheight=10
 set title
 set textwidth=0
+set completeopt=menu,preview "Disply complete preview
 
 let g:netrw_liststyle=1
 let g:netrw_banner=0
@@ -279,37 +291,36 @@ function! MyGitGutter()
   return join(ret, ' ')
 endfunction
 
-"=== Mute ======================================================
+
+"=======================================================================
+"=== Other options =====================================================
+"=======================================================================
+" Mute
 set t_vb=
 set visualbell
 set noerrorbells
 
-"=== Search ======================================================
-set incsearch
-set ignorecase
-set smartcase
-set hlsearch
-
-"=== Command mode ===============================================
-set wildmenu
-set wildmode=full
-
-"=== Hilight brackets ======================================================
+" Hilight brackets
 set matchpairs& matchpairs+=<:>
 
-"=== Disable swap ======================================================
+" Disable swap
 set nowritebackup
 set nobackup
 set noswapfile
 
-"=== Tab to space ======================================================
-set listchars=tab:^\ ,trail:~
-set expandtab
-set shiftwidth=4
-set softtabstop=4
+" Mouse
+"set mouse=a
+"set ttymouse=xterm2
 
-"=== key mapping ======================================================
-" set leader key
+" Window
+set splitright
+set splitbelow
+
+
+"=======================================================================
+"=== key mapping =======================================================
+"=======================================================================
+" Set leader key
 let mapleader="\<Space>"
 
 " General keymap
@@ -406,13 +417,11 @@ onoremap { i{
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
-"=== Mouse ========================================================
-"set mouse=a
-"set ttymouse=xterm2
-
-"=== Window ========================================================
-set splitright
-set splitbelow
+" Tab to space
+set listchars=tab:^\ ,trail:~
+set expandtab
+set shiftwidth=4
+set softtabstop=4
 
 "=== Highlight Trailing Spaces ======================================================
 augroup HighlightTrailingSpaces
