@@ -16,7 +16,8 @@
 "=======================================================================
 "=== Specify character code ============================================
 "=======================================================================
-set encoding=utf-8"{{{
+"{{{
+set encoding=utf-8
 scriptencoding utf-8
 
 let g:python3_host_prog=expand('/usr/bin/python3.6')
@@ -25,7 +26,8 @@ let g:python3_host_prog=expand('/usr/bin/python3.6')
 "=======================================================================
 "=== dein ==============================================================
 "=======================================================================
-if &compatible"{{{
+"{{{
+if &compatible
   set nocompatible               " Be iMproved
 endif
 
@@ -136,7 +138,8 @@ let g:LanguageClient_serverCommands = {
 "=======================================================================
 "=== Editor ============================================================
 "=======================================================================
-set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める{{{
+"{{{
+set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
 set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
 "set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
@@ -178,7 +181,8 @@ let g:syntastic_mode_map = {
 "=======================================================================
 "=== Visual ============================================================
 "=======================================================================
-set number"{{{
+"{{{
+set number
 "set list
 set ambiwidth=double
 set ruler
@@ -297,7 +301,8 @@ endfunction
 "=======================================================================
 "=== key mapping =======================================================
 "=======================================================================
-" Set leader key{{{
+"{{{
+" Set leader key
 let mapleader="\<Space>"
 
 " General keymap
@@ -312,7 +317,7 @@ noremap j gj
 noremap k gk
 " open .vimrc
 nnoremap <Leader>. :vs ~/.vimrc<CR>
-nnoremap <Leader>, :split ~/.cache/dein/plugins/plugins.toml<CR>
+"nnoremap <Leader>, :split ~/.cache/dein/plugins/plugins.toml<CR>
 
 " Shift-j,Shift-k,jump to blank line
 nnoremap <S-j> }
@@ -404,7 +409,8 @@ set softtabstop=4
 "=======================================================================
 "=== Other options =====================================================
 "=======================================================================
-" Mute{{{
+"{{{
+" Mute
 set t_vb=
 set visualbell
 set noerrorbells
