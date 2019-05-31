@@ -293,31 +293,6 @@ endfunction
 
 
 "=======================================================================
-"=== Other options =====================================================
-"=======================================================================
-" Mute
-set t_vb=
-set visualbell
-set noerrorbells
-
-" Hilight brackets
-set matchpairs& matchpairs+=<:>
-
-" Disable swap
-set nowritebackup
-set nobackup
-set noswapfile
-
-" Mouse
-"set mouse=a
-"set ttymouse=xterm2
-
-" Window
-set splitright
-set splitbelow
-
-
-"=======================================================================
 "=== key mapping =======================================================
 "=======================================================================
 " Set leader key
@@ -423,14 +398,41 @@ set expandtab
 set shiftwidth=4
 set softtabstop=4
 
-"=== Highlight Trailing Spaces ======================================================
+"=======================================================================
+"=== Other options =====================================================
+"=======================================================================
+" Mute
+set t_vb=
+set visualbell
+set noerrorbells
+
+" Hilight brackets
+set matchpairs& matchpairs+=<:>
+
+" Disable swap
+set nowritebackup
+set nobackup
+set noswapfile
+
+" Mouse
+"set mouse=a
+"set ttymouse=xterm2
+
+" Window
+set splitright
+set splitbelow
+
+" Marker
+au FileType text,markdown setlocal foldmethod=indent
+
+" Highlight Trailing Spaces
 augroup HighlightTrailingSpaces
   autocmd!
   autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
   autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
 augroup END
 
-"=== Paste ====================================================
+" Paste
 if &term =~ "xterm"
     let &t_SI .= "\e[?2004h"
     let &t_EI .= "\e[?2004l"
@@ -444,8 +446,10 @@ if &term =~ "xterm"
     inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
 endif
 
-"=== Buffer line ==================================================
+" Buffer line
 augroup vimrcEx
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
       \ exe "normal g`\"" | endif
 augroup END
+
+
