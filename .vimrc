@@ -13,20 +13,19 @@
 "      '---" '---'   |   ;/          |   |.'     \   \ .'
 "                    '---'           `---'        `---`
 
-
-
 "=======================================================================
 "=== Specify character code ============================================
 "=======================================================================
-set encoding=utf-8
+set encoding=utf-8"{{{
 scriptencoding utf-8
 
 let g:python3_host_prog=expand('/usr/bin/python3.6')
+"}}}
 
 "=======================================================================
 "=== dein ==============================================================
 "=======================================================================
-if &compatible
+if &compatible"{{{
   set nocompatible               " Be iMproved
 endif
 
@@ -123,18 +122,20 @@ endif
 if dein#tap('deoplete.nvim')
   let g:deoplete#enable_at_startup = 1
 endif
+"}}}
 
 "=======================================================================
 "=== Language server ===================================================
 "=======================================================================
-let g:LanguageClient_serverCommands = {
+let g:LanguageClient_serverCommands = {"{{{
     \ 'sh': ['bash-language-server', 'start']
     \ }
+"}}}
 
 "=======================================================================
 "=== Editor ============================================================
 "=======================================================================
-set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
+set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める{{{
 set infercase           " 補完時に大文字小文字を区別しない
 set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
 "set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
@@ -171,12 +172,12 @@ let g:syntastic_mode_map = {
     \ 'mode': 'passive',
     \ 'active_filetypes': ['sh', 'py', 'vim' ]
     \ }
-
+"}}}
 
 "=======================================================================
 "=== Visual ============================================================
 "=======================================================================
-set number
+set number"{{{
 "set list
 set ambiwidth=double
 set ruler
@@ -290,12 +291,12 @@ function! MyGitGutter()
   endfor
   return join(ret, ' ')
 endfunction
-
+"}}}
 
 "=======================================================================
 "=== key mapping =======================================================
 "=======================================================================
-" Set leader key
+" Set leader key{{{
 let mapleader="\<Space>"
 
 " General keymap
@@ -397,11 +398,12 @@ set listchars=tab:^\ ,trail:~
 set expandtab
 set shiftwidth=4
 set softtabstop=4
+"}}}
 
 "=======================================================================
 "=== Other options =====================================================
 "=======================================================================
-" Mute
+" Mute{{{
 set t_vb=
 set visualbell
 set noerrorbells
@@ -423,7 +425,7 @@ set splitright
 set splitbelow
 
 " Marker
-au FileType text,markdown setlocal foldmethod=indent
+au FileType text,markdown,vim setlocal foldmethod=marker
 
 " Highlight Trailing Spaces
 augroup HighlightTrailingSpaces
@@ -452,4 +454,5 @@ augroup vimrcEx
       \ exe "normal g`\"" | endif
 augroup END
 
+"}}}
 
