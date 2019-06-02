@@ -377,8 +377,8 @@ nmap <Leader>M <Plug>(quickhl-manual-reset)
 xmap <Leader>M <Plug>(quickhl-manual-reset)
 
 " Insert mode keymap
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
+"inoremap <C-j> <Down>
+"inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 inoremap <C-c> <Esc>
@@ -399,17 +399,48 @@ onoremap { i{
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
-" Tab to space
-set listchars=tab:^\ ,trail:~
-set expandtab
-set shiftwidth=4
-set softtabstop=4
+" NeoSnippet map
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+
 "}}}
 
 "=======================================================================
 "=== Other options =====================================================
 "=======================================================================
 "{{{
+" Indent
+set autoindent
+set smartindent
+set smarttab
+set expandtab
+set listchars=tab:^\ ,trail:~
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+
+if has("autocmd")
+  filetype plugin on
+  filetype indent on
+  "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtab
+  autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
+endif
+
 " Mute
 set t_vb=
 set visualbell
