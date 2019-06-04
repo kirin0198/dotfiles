@@ -81,6 +81,7 @@ if dein#load_state(s:dein_path)
   call dein#add('thinca/vim-showtime') "slid display
   call dein#add('simeji/winresizer') "move window
   call dein#add('Yggdroot/indentLine') "display indent line
+  call dein#add('elzr/vim-json') "json file plugin
   call dein#add('t9md/vim-quickhl') "Highlight multiple search
 
   " LSPPlug
@@ -173,9 +174,20 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 " set syntastic
 let g:syntastic_mode_map = {
-    \ 'mode': 'passive',
-    \ 'active_filetypes': ['sh', 'py', 'vim' ]
-    \ }
+  \ 'mode': 'passive',
+  \ 'active_filetypes': ['sh', 'py', 'vim' ]
+  \ }
+
+command! -nargs=? Jq call s:Jq(<f-args>)
+function! s:Jq(...)
+  if 0 == a:0
+    let l:arg = "."
+  else
+    let l:arg = a:1
+  endif
+  execute "%! jq \"" . l:arg . "\""
+endfunction
+
 "}}}
 
 "=======================================================================
@@ -370,6 +382,9 @@ nnoremap <Leader>bn :bn<CR>
 nnoremap <Leader>p "0p
 nnoremap <Leader>P "0P
 
+" jq keymap
+nnoremap <Leader>jq :Jq<CR>
+
 " QuickhighlightPlug
 nmap <Leader>m <Plug>(quickhl-manual-this)
 xmap <Leader>m <Plug>(quickhl-manual-this)
@@ -419,6 +434,8 @@ set listchars=tab:^\ ,trail:~
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
+set conceallevel=0
+let g:vim_json_syntax_conceal = 0
 
 if has("autocmd")
   filetype plugin on
@@ -433,7 +450,7 @@ if has("autocmd")
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType json        setlocal sw=2 sts=2 ts=2 et
   autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
