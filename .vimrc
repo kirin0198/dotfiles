@@ -90,11 +90,17 @@ if dein#load_state(s:dein_path)
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
 
   " EditorPlug
+  if has('job') && has('channel') && has('timers')
+    call dein#add('w0rp/ale') "ALE(Asynchronous Lint Engine)
+  else
+    call dein#add('vim-syntastic/syntastic')
+  endif
   call dein#add('cohama/lexima.vim') "Auto close parentheses and repeat by dot
   call dein#add('scrooloose/nerdtree') "Open file tree
   call dein#add('tomtom/tcomment_vim') "Auto comment out by gcc
   call dein#add('tpope/vim-surround') "Auto close parenthesis by S of when selecting  in visual mode
-  call dein#add('scrooloose/syntastic') "Check for syntax
+  " call dein#add('scrooloose/syntastic') "Check for syntax
+  call dein#add('maximbaz/lightline-ale') "Provide ALE to Light line
 
   " FileSearch
   call dein#add('junegunn/fzf', {'build': './install --all'})
@@ -172,6 +178,29 @@ set undolevels=1000
 let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
+" set ale
+let b:ale_linters = {
+\   'javascript': ['eslint', 'eslint-plugin-vue'],
+\   'python': ['pyflakes', 'pep8'],
+\   'ruby': ['rubocop'],
+\   'tex': ['textlint'],
+\   'markdown': ['textlint'],
+\   'css': ['stylelint'],
+\}
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:ale_echo_msg_error_str = nr2char(0xf421) . ' '
+let g:ale_echo_msg_warning_str = nr2char(0xf420) . ' '
+let g:ale_echo_msg_info_str = nr2char(0xf05a) . ' '
+let g:ale_echo_msg_format = '%severity%  %linter% - %s'
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = g:ale_echo_msg_error_str
+let g:ale_sign_warning = g:ale_echo_msg_warning_str
+let g:ale_statusline_format = [
+      \ g:ale_echo_msg_error_str . ' %d',
+      \ g:ale_echo_msg_warning_str . ' %d',
+      \ nr2char(0xf4a1) . '  ']
+let g:lightline_delphinus_gitgutter_enable = 1
 " set syntastic
 let g:syntastic_mode_map = {
   \ 'mode': 'passive',
@@ -245,8 +274,8 @@ let g:lightline = {
     \ 'colorscheme': 'seoul256',
     \ 'active': {
     \     'left': [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'gitgutter', 'readonly', 'filename' ],
-    \               [ 'modified', 'syntastic' ] ]
+    \               [ 'fugitive', 'gitgutter', 'readonly', 'filename', 'modified' ],
+    \               [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ]
     \ },
     \ 'component': {
     \     'lineinfo': '%3l:%-2v',
@@ -256,11 +285,17 @@ let g:lightline = {
     \     'fugitive': 'MyFugitive',
     \     'gitgutter': 'MyGitGutter'
     \ },
-    \ 'component_expand': {
-    \     'syntastic': 'SyntasticStatuslineFlag'
-    \ },
     \ 'component_type': {
-    \     'syntastic': 'error'
+    \     'linter_checking': 'left',
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \     'linter_ok': 'left'
+    \ },
+    \ 'component_expand': {
+    \  'linter_checking': 'lightline#ale#checking',
+    \  'linter_warnings': 'lightline#ale#warnings',
+    \  'linter_errors': 'lightline#ale#errors',
+    \  'linter_ok': 'lightline#ale#ok'
     \ }
     \ }
 
@@ -268,14 +303,14 @@ function! MyReadonly()
   return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
 endfunction
 
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost *.vim,*.sh,*.py call s:syntastic()
-augroup END
-function! s:syntastic()
-  SyntasticCheck
-  call lightline#update()
-endfunction
+" augroup AutoSyntastic
+"   autocmd!
+"   autocmd BufWritePost *.vim,*.sh,*.py call s:syntastic()
+" augroup END
+" function! s:syntastic()
+"   SyntasticCheck
+"   call lightline#update()
+" endfunction
 
 function! MyFugitive()
   try
@@ -400,7 +435,6 @@ inoremap <C-c> <Esc>
 
 " terminal mode keymap
 tnoremap <C-o> <C-w>
-tnoremap <C-k> <C-w>:q!<CR>
 
 " Operator mode keymap
 onoremap 9 i(
