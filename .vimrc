@@ -89,18 +89,21 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/vim-lsp')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
 
-  " EditorPlug
+  " ALEPlug
   if has('job') && has('channel') && has('timers')
     call dein#add('w0rp/ale') "ALE(Asynchronous Lint Engine)
   else
     call dein#add('vim-syntastic/syntastic')
   endif
+  call dein#add('maximbaz/lightline-ale') "Provide ALE to Light line
+
+  " EditorPlug
   call dein#add('cohama/lexima.vim') "Auto close parentheses and repeat by dot
   call dein#add('scrooloose/nerdtree') "Open file tree
   call dein#add('tomtom/tcomment_vim') "Auto comment out by gcc
   call dein#add('tpope/vim-surround') "Auto close parenthesis by S of when selecting  in visual mode
   " call dein#add('scrooloose/syntastic') "Check for syntax
-  call dein#add('maximbaz/lightline-ale') "Provide ALE to Light line
+  call dein#add('thinca/vim-quickrun') "Quickly executed for the opened file
 
   " FileSearch
   call dein#add('junegunn/fzf', {'build': './install --all'})
