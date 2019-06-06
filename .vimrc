@@ -54,7 +54,7 @@ if dein#load_state(s:dein_path)
 
   " Call deoplete
   if ((has('nvim')  || has('timers')) && has('python3')) && system('pip3 show neovim') !=# ''
-    call dein#add('Shougo/deoplete.nvim')
+    " call dein#add('Shougo/deoplete.nvim')
     call dein#add('Shougo/neco-vim')
     call dein#add('Shougo/neco-syntax')
     call dein#add('ujihisa/neco-look')
@@ -64,7 +64,7 @@ if dein#load_state(s:dein_path)
     endif
   endif
 
-  let g:deoplete#enable_at_startup = 1
+  " let g:deoplete#enable_at_startup = 0
 
   " Let dein manage dein
   " Required:
@@ -87,6 +87,8 @@ if dein#load_state(s:dein_path)
   " LSPPlug
   call dein#add('prabirshrestha/async.vim')
   call dein#add('prabirshrestha/vim-lsp')
+  call dein#add('prabirshrestha/asyncomplete.vim')
+  call dein#add('prabirshrestha/asyncomplete-lsp.vim')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
 
   " ALEPlug
@@ -137,12 +139,21 @@ endif
 "}}}
 
 "=======================================================================
-"=== Language server ===================================================
+"=== Language Server Protcol (Complement) ===================================================
 "=======================================================================
 "{{{
+" Bash LSP conf
 let g:LanguageClient_serverCommands = {
     \ 'sh': ['bash-language-server', 'start']
     \ }
+" Python LSP conf
+if executable('pyls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
 "}}}
 
 "=======================================================================
@@ -182,14 +193,18 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 " set ale
-let b:ale_linters = {
+let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
+\   'sh': ['language-server'],
 \   'python': ['pyflakes', 'pep8'],
+\   'json': ['jsonlint'],
 \   'ruby': ['rubocop'],
 \   'tex': ['textlint'],
 \   'markdown': ['textlint'],
 \   'css': ['stylelint'],
 \}
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 let g:ale_echo_msg_error_str = nr2char(0xf421) . ' '
@@ -205,10 +220,10 @@ let g:ale_statusline_format = [
       \ nr2char(0xf4a1) . '  ']
 let g:lightline_delphinus_gitgutter_enable = 1
 " set syntastic
-let g:syntastic_mode_map = {
-  \ 'mode': 'passive',
-  \ 'active_filetypes': ['sh', 'py', 'vim' ]
-  \ }
+" let g:syntastic_mode_map = {
+"   \ 'mode': 'passive',
+"   \ 'active_filetypes': ['sh', 'py', 'vim' ]
+"   \ }
 
 command! -nargs=? Jq call s:Jq(<f-args>)
 function! s:Jq(...)
@@ -487,7 +502,7 @@ if has("autocmd")
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType json        setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
