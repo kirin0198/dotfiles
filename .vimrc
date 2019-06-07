@@ -197,10 +197,11 @@ let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
 \   'sh': ['shell'],
 \   'python': ['pyflakes', 'pep8'],
-\   'json': ['jsonlint'],
 \   'ruby': ['rubocop'],
 \   'tex': ['textlint'],
 \   'markdown': ['textlint'],
+\   'yaml': ['yamllint'],
+\   'json': ['jsonlint'],
 \   'css': ['stylelint'],
 \}
 let g:ale_lint_on_save = 1
@@ -270,6 +271,10 @@ highlight cursorline term=reverse cterm=none ctermbg=236
 " set colorcolumn=80
 
 set laststatus=2
+
+" ALE symbols
+let g:ale_sign_error = '🚫'
+let g:ale_sign_warning = '⚠️'
 
 " GitGutter
 let g:gitgutter_sign_added = '✚'
@@ -386,26 +391,6 @@ let g:lightline = {
     \  'linter_ok': 'LightlineLinterOK'
     \ }
     \ }
-
-" Update and show lightline but only if it's visible
-function! s:MaybeUpdateLightline()
-  if exists('#lightline')
-    call lightline#update()
-  end
-endfunction
-
-" Update the lightline scheme from the colorscheme. Hopefully.
-function! s:UpdateLightlineColorScheme()
-  let g:lightline.colorscheme = g:colors_name
-  call lightline#init()
-endfunction
-
-augroup _lightline
-  autocmd!
-  autocmd User ALELint call s:MaybeUpdateLightline()
-  autocmd ColorScheme * call s:UpdateLightlineColorScheme()
-augroup END
-
 "}}}
 
 "=======================================================================
