@@ -195,7 +195,7 @@ let g:fzf_action = {
 " set ale
 let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
-\   'sh': ['language-server'],
+\   'sh': ['shell'],
 \   'python': ['pyflakes', 'pep8'],
 \   'json': ['jsonlint'],
 \   'ruby': ['rubocop'],
@@ -283,39 +283,11 @@ let g:gitgutter_sign_removed = '✘'
 "let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " lightline setting
+set noshowmode
+
 if !has('gui_running')
   set t_Co=256
 endif
-
-set noshowmode
-let g:lightline = {
-    \ 'colorscheme': 'seoul256',
-    \ 'active': {
-    \     'left': [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'gitgutter', 'readonly', 'filename', 'modified' ],
-    \               [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ]
-    \ },
-    \ 'component': {
-    \     'lineinfo': '%3l:%-2v',
-    \ },
-    \ 'component_function': {
-    \     'readonly': 'MyReadonly',
-    \     'fugitive': 'MyFugitive',
-    \     'gitgutter': 'MyGitGutter'
-    \ },
-    \ 'component_type': {
-    \     'linter_checking': 'left',
-    \     'linter_warnings': 'warning',
-    \     'linter_errors': 'error',
-    \     'linter_ok': 'left'
-    \ },
-    \ 'component_expand': {
-    \  'linter_checking': 'lightline#ale#checking',
-    \  'linter_warnings': 'lightline#ale#warnings',
-    \  'linter_errors': 'lightline#ale#errors',
-    \  'linter_ok': 'lightline#ale#ok'
-    \ }
-    \ }
 
 function! MyReadonly()
   return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
@@ -361,6 +333,79 @@ function! MyGitGutter()
   endfor
   return join(ret, ' ')
 endfunction
+
+function! LightlineLinterWarnings() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf('Hmmm..:%d', all_non_errors)
+endfunction
+
+function! LightlineLinterErrors() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf('Oh..:%d', all_errors)
+endfunction
+
+function! LightlineLinterOK() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? 'GOOD!' : ''
+endfunction
+
+let g:lightline = {
+    \ 'colorscheme': 'seoul256',
+    \ 'active': {
+    \     'left': [ [ 'mode', 'paste' ],
+    \               [ 'fugitive', 'gitgutter', 'readonly', 'filename', 'modified' ],
+    \               [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ],
+    \     'right': [ [ 'lineinfo' ],
+    \                [ 'percent' ],
+    \                [ 'fileformat', 'fileencoding', 'filetype' ] ]
+    \ },
+    \ 'component': {
+    \     'lineinfo': '%3l:%-2v',
+    \ },
+    \ 'component_function': {
+    \     'readonly': 'MyReadonly',
+    \     'fugitive': 'MyFugitive',
+    \     'gitgutter': 'MyGitGutter'
+    \ },
+    \ 'component_type': {
+    \     'linter_checking': 'left',
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \     'linter_ok': 'left'
+    \ },
+    \ 'component_expand': {
+    \  'linter_checking': 'lightline#ale#checking',
+    \  'linter_warnings': 'LightlineLinterWarnings',
+    \  'linter_errors': 'LightlineLinterErrors',
+    \  'linter_ok': 'LightlineLinterOK'
+    \ }
+    \ }
+
+" Update and show lightline but only if it's visible
+function! s:MaybeUpdateLightline()
+  if exists('#lightline')
+    call lightline#update()
+  end
+endfunction
+
+" Update the lightline scheme from the colorscheme. Hopefully.
+function! s:UpdateLightlineColorScheme()
+  let g:lightline.colorscheme = g:colors_name
+  call lightline#init()
+endfunction
+
+augroup _lightline
+  autocmd!
+  autocmd User ALELint call s:MaybeUpdateLightline()
+  autocmd ColorScheme * call s:UpdateLightlineColorScheme()
+augroup END
+
 "}}}
 
 "=======================================================================
