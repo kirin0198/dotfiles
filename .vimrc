@@ -186,12 +186,15 @@ if has('persistent_undo')
   set undodir=~/.vim/undo
   set undofile
 endif
+
 " log level
 set undolevels=1000
+
 " fzf variables
 let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
+
 " set ale
 let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
@@ -199,6 +202,7 @@ let g:ale_linters = {
 \   'python': ['pyflakes', 'pep8'],
 \   'ruby': ['rubocop'],
 \   'tex': ['textlint'],
+\   'vim': ['vint'],
 \   'markdown': ['textlint'],
 \   'yaml': ['yamllint'],
 \   'json': ['jsonlint'],
@@ -229,7 +233,7 @@ let g:lightline_delphinus_gitgutter_enable = 1
 command! -nargs=? Jq call s:Jq(<f-args>)
 function! s:Jq(...)
   if 0 == a:0
-    let l:arg = "."
+    let l:arg = '.'
   else
     let l:arg = a:1
   endif
@@ -253,8 +257,8 @@ set completeopt=menu,preview "Disply complete preview
 
 let g:netrw_liststyle=1
 let g:netrw_banner=0
-let g:netrw_sizestyle="H"
-let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
+let g:netrw_sizestyle='H'
+let g:netrw_timefmt='%Y/%m/%d(%a) %H:%M:%S'
 let g:netrw_preview=1
 
 " Colors
@@ -465,6 +469,9 @@ nnoremap <Leader>bn :bn<CR>
 nnoremap <Leader>p "0p
 nnoremap <Leader>P "0P
 
+nnoremap n nzz
+nnoremap N Nzz
+
 " jq keymap
 nnoremap <Leader>jq :Jq<CR>
 
@@ -519,7 +526,7 @@ set softtabstop=2
 set conceallevel=0
 let g:vim_json_syntax_conceal = 0
 
-if has("autocmd")
+if has('autocmd')
   filetype plugin on
   filetype indent on
   "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtab
@@ -572,7 +579,7 @@ augroup HighlightTrailingSpaces
 augroup END
 
 " Paste
-if &term =~ "xterm"
+if &term =~ 'xterm'
     let &t_SI .= "\e[?2004h"
     let &t_EI .= "\e[?2004l"
     let &pastetoggle = "\e[201~"
