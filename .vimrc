@@ -19,6 +19,8 @@
 " == ALE lint ==
 " [pip3]
 " vim-vint, pep8, pyflakes, yamllint,
+" [npm]
+" jsonlint
 
 " == Language Server ==
 " [pip3]
@@ -40,9 +42,9 @@ let g:python3_host_prog=expand('/usr/bin/python3.6')
 "=== dein ==============================================================
 "=======================================================================
 "{{{
-if &compatible
-  set nocompatible               " Be iMproved
-endif
+" if &compatible
+"   set nocompatible               " Be iMproved
+" endif
 
 let s:dein_path = expand('$HOME/.cache/dein')
 let s:dein_repo_path = s:dein_path . '/repos/github.com/Shougo/dein.vim'
@@ -162,17 +164,24 @@ let g:LanguageClient_serverCommands = {
     \ }
 " Python LSP conf
 if executable('pyls')
-    au User lsp_setup call lsp#register_server({
+  augroup pythonLanguageServer
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'pyls',
         \ 'cmd': {server_info->['pyls']},
         \ 'whitelist': ['python'],
         \ })
+  augroup END
 endif
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
-    \ 'name': 'necovim',
-    \ 'whitelist': ['vim'],
-    \ 'completor': function('asyncomplete#sources#necovim#completor'),
-    \ }))
+" Vim LSP conf
+augroup vimLanguageServer
+  autocmd!
+  autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+      \ 'name': 'necovim',
+      \ 'whitelist': ['vim'],
+      \ 'completor': function('asyncomplete#sources#necovim#completor'),
+      \ }))
+  augroup END
 "}}}
 
 "=======================================================================
@@ -319,7 +328,7 @@ if !has('gui_running')
 endif
 
 function! MyReadonly()
-  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
+  return &filetype !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
 endfunction
 
 " augroup AutoSyntastic
@@ -333,7 +342,7 @@ endfunction
 
 function! MyFugitive()
   try
-    if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+    if &filetype !~? 'vimfiler\|gundo' && exists('*fugitive#head')
       let _ = fugitive#head()
       return strlen(_) ? ''._ : ''
     endif
@@ -546,7 +555,8 @@ set softtabstop=2
 set conceallevel=0
 let g:vim_json_syntax_conceal = 0
 
-if has('autocmd')
+augroup indentFiletype
+  autocmd!
   filetype plugin on
   filetype indent on
   "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtab
@@ -565,7 +575,7 @@ if has('autocmd')
   autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
-endif
+augroup END
 
 " Mute
 set t_vb=
@@ -589,7 +599,11 @@ set splitright
 set splitbelow
 
 " Marker
-au FileType text,markdown,vim setlocal foldmethod=marker
+augroup hiddenMarker
+  autocmd!
+  autocmd FileType text,markdown,vim setlocal foldmethod=marker
+augroup END
+
 
 " Highlight Trailing Spaces
 augroup HighlightTrailingSpaces
@@ -599,7 +613,7 @@ augroup HighlightTrailingSpaces
 augroup END
 
 " Paste
-if &term =~ 'xterm'
+if &term =~? 'xterm'
     let &t_SI .= "\e[?2004h"
     let &t_EI .= "\e[?2004l"
     let &pastetoggle = "\e[201~"
