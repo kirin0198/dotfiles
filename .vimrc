@@ -14,6 +14,19 @@
 "                    '---'           `---'        `---`
 
 "=======================================================================
+"=== Package Install List ============================================
+"=======================================================================
+" == ALE lint ==
+" [pip3]
+" vim-vint, pep8, pyflakes, yamllint,
+
+" == Language Server ==
+" [pip3]
+" python-language-server,
+" [npm]
+" bash-language-server
+
+"=======================================================================
 "=== Specify character code ============================================
 "=======================================================================
 "{{{
@@ -214,6 +227,7 @@ let g:ale_linters = {
 \   'json': ['jsonlint'],
 \   'css': ['stylelint'],
 \}
+
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_set_loclist = 0
@@ -284,7 +298,7 @@ set laststatus=2
 
 " ALE symbols
 let g:ale_sign_error = '🚫'
-let g:ale_sign_warning = '⚠️'
+let g:ale_sign_warning = '⚠ '
 
 " GitGutter
 let g:gitgutter_sign_added = '✚'
