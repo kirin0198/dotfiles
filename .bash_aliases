@@ -7,3 +7,4 @@
 # ==========================================
 alias vi="vim"
 alias nv="nvim"
+alias vimd="vimdiff"

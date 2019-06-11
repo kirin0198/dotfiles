@@ -159,9 +159,18 @@ endif
 "=======================================================================
 "{{{
 " Bash LSP conf
-let g:LanguageClient_serverCommands = {
-    \ 'sh': ['bash-language-server', 'start']
-    \ }
+if executable('bash-language-server')
+  augroup bashLanguageServer
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'bash-language-server',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
+          \ 'whitelist': ['sh'],
+          \ })
+  augroup END
+endif
+
+
 " Python LSP conf
 if executable('pyls')
   augroup pythonLanguageServer
@@ -460,13 +469,13 @@ nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
 nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
 
 " Directory Tree for NERDTree
-nnoremap <silent><Leader>t :NERDTreeToggle<CR>
+nnoremap <silent><Leader>tf :NERDTreeToggle<CR>
 let NERDTreeShowHidden = 1 " Disply hidden file
 
 " Tab
 nnoremap <Leader>tn :tabnew<CR>
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
+" nnoremap <Tab> gt
+" nnoremap <S-Tab> gT
 
 " Move screen
 nnoremap <Leader>sw <C-w>w
@@ -516,6 +525,10 @@ xmap <Leader>M <Plug>(quickhl-manual-reset)
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 inoremap <C-c> <Esc>
+
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 
 " terminal mode keymap
 tnoremap <C-o> <C-w>
