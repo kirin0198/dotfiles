@@ -26,7 +26,7 @@
 # yum install -y epel-release
 # yum isntall python36 python36-devel python36-libs python36-pip npm
 # if [[ ${PROXY_FLAG} -eq 1 ]]; then
-#   pip --proxy http://${PROXY}:${PORT}
+#   pip --proxy http://${PROXY}:${PROXY_PORT}
 #   npm -g config set proxy http://${PROXY}:${PORT}
 # fi
 # pip3 install --upgrade pip
@@ -44,6 +44,7 @@
 # cd ~/git/vim/src
 # ./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(/usr/bin/python3.6-config) --enable-fail-if-missing
 # sudo make && sudo make install
+# echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> .bashrc or .zshrc
 
 
 
