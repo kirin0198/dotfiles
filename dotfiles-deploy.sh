@@ -17,14 +17,19 @@
 # EOS
 # fi
 #
+# Update base repository packageis
 # yum update -y
 #
+# Install for git and clone my dotfiles 
 # yum install git
 # git clone https://github.com/kirin0198/dotfiles.git
 
 # [Deploy]
+# Install for need packageis
 # yum install -y epel-release
 # yum isntall python36 python36-devel python36-libs python36-pip npm
+# yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
+#
 # if [[ ${PROXY_FLAG} -eq 1 ]]; then
 #   pip --proxy http://${PROXY}:${PROXY_PORT}
 #   npm -g config set proxy http://${PROXY}:${PORT}
