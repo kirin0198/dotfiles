@@ -1,9 +1,57 @@
 #/bin/bash
 
+##################################################################33
+# Work Flow
+##################################################################33
+# [Preparation]
+# Login to root
+# Replace "ListenAddress" for /etc/ssh/sshd_config, and restart sshd
+# setenforce 0
+#
+# if [[ ${PROXY_FLAG} -eq 1 ]]; then
+#   export HTTP_PROXY=xxx
+#   export HTTPS_PROXY=xxx
+#   cat << EOS > /etc/profile and /etc/yum.conf
+# export HTTP_PROXY=xxx
+# export HTTPS_PROXY=xxx
+# EOS
+# fi
+#
+# yum update -y
+#
+# yum install git
+# git clone https://github.com/kirin0198/dotfiles.git
+
+# [Deploy]
+# yum install -y epel-release
+# yum isntall python36 python36-devel python36-libs python36-pip npm
+# if [[ ${PROXY_FLAG} -eq 1 ]]; then
+#   pip --proxy http://${PROXY}:${PORT}
+#   npm -g config set proxy http://${PROXY}:${PORT}
+# fi
+# pip3 install --upgrade pip
+# sudo pip3 install neovim vim-vint pep8 pyflakes yamllint python-language-server
+# npm config set python $(which python)
+# npm config set python $(which python3)
+# npm install --unsafe-perm -g node-inspector
+# sudo npm install -g jsonlint bash-language-server
+#
+# mkdir ~/git && cd $_
+# git clone https://github.com/vim/vim.git
+
+# yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
+# yum install -y ncurses-devel gtk2-devel atk-devel libX11-devel libXt-devel gcc
+# cd ~/git/vim/src
+# ./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(/usr/bin/python3.6-config) --enable-fail-if-missing
+# sudo make && sudo make install
+
+
+
+
 DIR_LIST[0]=".cache/dein"
-DIR_LIST[1]=".cache/dein/plugins"
-DIR_LIST[2]=".vim/colors"
-DIR_LIST[3]=".bash_config"
+# DIR_LIST[1]=".cache/dein/plugins"
+DIR_LIST[1]=".vim/colors"
+DIR_LIST[2]=".bash_config"
 
 FILE_LIST[0]=".vimrc"
 FILE_LIST[1]=".inputrc"
