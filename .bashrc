@@ -137,4 +137,9 @@ fi
 #  PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 #fi
 
+# enable fzf setting
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Ctrl+w command separator
+stty werase undef
+bind '"\C-w": unix-filename-rubout'
