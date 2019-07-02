@@ -112,16 +112,16 @@ unset -f pathmunge _src_etc_profile_d
 autoload -Uz vcs_info
 setopt prompt_subst
 zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr " %F{011}+"
-zstyle ':vcs_info:git:*' unstagedstr " %F{027}*"
-zstyle ':vcs_info:*' formats " %F{010}%b%c%u%f "
+zstyle ':vcs_info:git:*' stagedstr " %F{000}+"
+zstyle ':vcs_info:git:*' unstagedstr " %F{000}*"
+zstyle ':vcs_info:*' formats " %F{000}%b%c%u%f "
 zstyle ':vcs_info:*' actionformats ' %b|%a '
 precmd () { vcs_info }
 
 # Set prompts
 # PROMPT='[%n@%m]%~%# '    # default prompt
 # PROMPT='%F{009}%n%f%F{015}@%f%F{003}%m%f %F{044}%~ ${vcs_info_msg_0_}%B%(?,%F{002},%F{009})%(!,#,>)%f%b '
-PROMPT='%F{232}%K{245}%n@%m %k%f%K{240}%F{245} %f%F{254}%~ %k%K{232}%F{240}%f${vcs_info_msg_0_}%k%F{232}%f '
+PROMPT='%F{208}%K{238}%n@%m %k%f%K{081}%F{238} %f%F{000}%~ %k%K{208}%F{081}%f${vcs_info_msg_0_}%k%F{208}%f '
 RPROMPT='%f%B%(?,,%F{009}✘)%f%b'
 # PROMPT="%{${bg[039]%}%}%{${fg[black]}%} %n %{${bg[white]}%}%{${fg[blue]}%} %{${bg[white]}%}%{${fg[black]}%} %~ %{${reset_color}%}%{${fg[white]}%}  %{${reset_color}%}"
 # RPROMPT=' %~'     # prompt for right side of screen
