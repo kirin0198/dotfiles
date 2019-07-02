@@ -1,9 +1,8 @@
 #/bin/bash
 
 ##################################################################33
-# Work Flow
+# Preparation
 ##################################################################33
-# [Preparation]
 # Login to root
 # Replace "ListenAddress" for /etc/ssh/sshd_config, and restart sshd
 # setenforce 0
@@ -18,13 +17,50 @@
 # fi
 #
 # Update base repository packageis
-yum update -y
-#
+# yum update -y
+# yum install -y git
+# git clone https://github.com/kirin0198/dotfiles.git
+
+
+##################################################################33
+# Variables
+##################################################################33
+DOT_DIR="${HOME}/dotfiles"
+
+##################################################################33
+# Functions
+##################################################################33
+has() {
+  type "$1" > /dev/null 2>&1
+}
+
+
+##################################################################33
+# MAIN
+##################################################################33
+if [[ -d ${DOT_DIR} ]]; then
+  cd "${DOT_DIR}"
+else
+  /bin/cat << EOS
+[ERROR] Not exist directory. Please execute brow command.
+
+    git clone https://github.com/kirin0198/dotfiles.git
+
+EOS
+fi
+
+for f in .??*; do
+    [ "$f" = ".git" ] && continue
+    [ "$f" = ".gitmodules" ] && continue
+
+    ln -snfv "${DOT_DIR}/$f" "${HOME}"
+done
+
 # Install for git and clone my dotfiles
 # [Deploy]
 # Install for need packageis
+
 yum install -y \
-  git \
   epel-release \
   python36 \
   python36-devel \
@@ -39,7 +75,6 @@ yum install -y \
   perl-ExtUtils-MakeMaker \
   vim
 
-git clone https://github.com/kirin0198/dotfiles.git
 
 #
 # if [[ ${PROXY_FLAG} -eq 1 ]]; then
