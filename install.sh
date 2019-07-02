@@ -60,20 +60,12 @@ done
 # [Deploy]
 # Install for need packageis
 
-yum install -y \
-  epel-release \
-  python36 \
-  python36-devel \
-  python36-libs \
-  python36-pip \
-  npm \
-  curl-devel \
-  expat-devel \
-  gettext-devel \
-  openssl-devel \
-  zlib-devel \
-  perl-ExtUtils-MakeMaker \
-  vim
+if [[ "${1}" == ubuntu ]]; then
+  CMD="apt"
+elif [[ "${1}" == rhel ]]; then
+  CMD="yum"
+fi
+${CMD} -y install  epel-release  python36 python36-devel python36-libs python36-pip npm curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
 
 
 #
@@ -97,37 +89,3 @@ yum install -y \
 # ./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(/usr/bin/python3.6-config) --enable-fail-if-missing
 # sudo make && sudo make install
 # echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> .bashrc or .zshrc
-
-
-
-
-DIR_LIST[0]=".cache/dein"
-# DIR_LIST[1]=".cache/dein/plugins"
-DIR_LIST[1]=".vim/colors"
-DIR_LIST[2]=".bash_config"
-
-FILE_LIST[0]=".vimrc"
-FILE_LIST[1]=".inputrc"
-FILE_LIST[2]=".cache/dein/plugins/plugins.toml"
-FILE_LIST[3]=".cache/dein/plugins/plugins_lazy.toml"
-FILE_LIST[4]=".bash_config/git-prompt.sh"
-
-echo "Start setup process...."
-
-for TARGET_DIR in ${DIR_LIST[@]}; do
-    if [[ -d "$HOME"/"${TARGET_DIR}" ]]; then
-        echo "Already setup. Dir: ${TARGET_DIR}"
-    else
-        mkdir -p "$HOME"/"${TARGET_DIR}"
-    fi
-done
-
-for TARGET_FILE in ${FILE_LIST[@]}; do
-    if [[ -f "$HOME"/"${TARGET_FILE}" ]]; then
-        echo "Already setup. ${TARGET_FILE}"
-    else
-        ln -sf ~/dotfiles/"${TARGET_FILE}" "$HOME"/"${TARGET_FILE}"
-    fi
-done
-
-echo "Finish install process!"
