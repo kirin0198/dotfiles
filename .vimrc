@@ -592,6 +592,7 @@ augroup indentFiletype
   autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType groovy      setlocal sw=4 sts=4 ts=4 et
 augroup END
 
 " Mute

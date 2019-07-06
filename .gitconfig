@@ -1,11 +1,21 @@
 [user]
 	name = kirin0198
 	email = kirin.cero.07@gmail.com
-[push]
-	default = current
+[color]
+  diff = auto
+  status = auto
+  branch = auto
 [core]
 	editor = vim -c \"set fenc=utf-8\"
 [alias]
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-  chm = checkout master
   st = status
+  chm = checkout master
+	ch = checkout
+	cm = commit
+	ps = push
+	pl = pull
+	ad = add
+	br = branch
+	bra = branch -a
+	brd = branch -D

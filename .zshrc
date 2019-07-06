@@ -10,10 +10,12 @@
 autoload -Uz colors
 colors
 
+## keybind
 bindkey -v             # vi key bindings
 # bindkey -e             # emacs key bindings
 # bindkey ' ' magic-space  # also do history expansion on space
-
+# ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
+bindkey '^R' history-incremental-pattern-search-backward
 
 HISTFILE=~/.zsh_history
 HISTSIZE=1000000
@@ -133,11 +135,6 @@ setopt hist_reduce_blanks
 # 高機能なワイルドカード展開を使用する
 setopt extended_glob
 
-########################################
-# キーバインド
-
-# ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
-bindkey '^R' history-incremental-pattern-search-backward
 
 ########################################
 # エイリアス
@@ -203,14 +200,28 @@ _src_etc_profile_d()
 _src_etc_profile_d
 
 
+unset -f pathmunge _src_etc_profile_d
+
+## Git setting
+autoload -Uz vcs_info
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr " %F{000}+"
+zstyle ':vcs_info:git:*' unstagedstr " %F{000}*"
+zstyle ':vcs_info:*' formats " %F{000}%b%c%u%f "
+zstyle ':vcs_info:*' actionformats ' %b|%a '
+precmd () { vcs_info }
+
 # Set prompts
-PROMPT='%F{red}%n%F{white}@%F{yellow}%m %F{cyan}%~ `rprompt-git-current-branch`%F{white}%# '    # default prompt
+# PROMPT='[%n@%m]%~%# '    # default prompt
+# PROMPT='%F{009}%n%f%F{015}@%f%F{003}%m%f %F{044}%~ ${vcs_info_msg_0_}%B%(?,%F{002},%F{009})%(!,#,>)%f%b '
+PROMPT='%F{208}%K{238}%n@%m %k%f%K{081}%F{238} %f%F{000}%~ %k%K{208}%F{081}%f${vcs_info_msg_0_}%k%F{208}%f '
+RPROMPT='%f%B%(?,,%F{009}✘)%f%b'
+# PROMPT="%{${bg[039]%}%}%{${fg[black]}%} %n %{${bg[white]}%}%{${fg[blue]}%} %{${bg[white]}%}%{${fg[black]}%} %~ %{${reset_color}%}%{${fg[white]}%}  %{${reset_color}%}"
+# RPROMPT=' %~'     # prompt for right side of screen
+# PROMPT='%F{red}%n%F{white}@%F{yellow}%m %F{cyan}%~ `rprompt-git-current-branch`%F{white}%# '    # default prompt
 # PROMPT="%{${bg[white]}%}%{${fg[black]}%}%~ %{${reset_color}%}%{${fg[white]}%}  %{${reset_color}%}"
 # PROMPT="%{${bg[blue]%}%}%{${fg[black]}%} %n %{${bg[white]}%}%{${fg[blue]}%} %{${bg[white]}%}%{${fg[black]}%} %~ %{${reset_color}%}%{${fg[white]}%}  %{${reset_color}%}"
 # PROMPT="%K{green}%F{white} %~ %k%f%F{green}%K{blue}%k%f%F{white}%K{blue} ${vcs_info_msg_0_} %k%f%F{blue}%K{black} %f"
-#RPROMPT=' %~'     # prompt for right side of screen
-
+# RPROMPT=' %~'     # prompt for right side of screen
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-unset -f pathmunge _src_etc_profile_d
-
