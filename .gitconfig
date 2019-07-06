@@ -19,3 +19,5 @@
 	br = branch
 	bra = branch -a
 	brd = branch -D
+[push]
+	default = current
