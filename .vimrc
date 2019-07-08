@@ -126,6 +126,7 @@ if dein#load_state(s:dein_path)
   call dein#add('tpope/vim-surround') "Auto close parenthesis by S of when selecting  in visual mode
   " call dein#add('scrooloose/syntastic') "Check for syntax
   call dein#add('thinca/vim-quickrun') "Quickly executed for the opened file
+  call dein#add('mattn/gist-vim') "Edit Gist on vim
 
   " FileSearch
   call dein#add('junegunn/fzf', {'build': './install --all'})
