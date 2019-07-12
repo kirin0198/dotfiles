@@ -124,8 +124,10 @@ GIT_PS1_SHOWUPSTREAM=auto
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
+    source <(kubectl completion bash)
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+    source <(kubectl completion bash)
   fi
 fi
 
