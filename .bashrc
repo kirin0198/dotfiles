@@ -59,9 +59,20 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+RCol='\[\e[0m\]'
+
+Red='\[\e[0;31m\]'
+Gre='\[\e[0;32m\]'
+BYel='\[\e[1;33m\]'
+BBlu='\[\e[1;34m\]'
+Pur='\[\e[0;35m\]'
+
 if [ "$color_prompt" = yes ]; then
 #    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\W\[\033[01;33m\]$(__git_ps1) \[\033[01;32m\]>\[\033[00m\] '
+    PS1='\[\e[0;31m\]\u\[\e[0;1m\]@\[\e[0;33m\]\h \[\033[01;36m\]\W\[\033[01;32m\]$(__git_ps1) \[\033[01;35m\]>\[\033[00m\] '
+    if [[ ${EXIT} -ne 0 ]]; then
+      PS1+="${Red}✘${RCol} "
+    fi
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -124,10 +135,14 @@ GIT_PS1_SHOWUPSTREAM=auto
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
-    source <(kubectl completion bash)
+    if type "kubectl" > /dev/null 2>&1; then
+      source <(kubectl completion bash)
+    fi
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
-    source <(kubectl completion bash)
+    if type "kubectl" > /dev/null 2>&1; then
+      source <(kubectl completion bash)
+    fi
   fi
 fi
 
