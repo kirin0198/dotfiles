@@ -111,7 +111,7 @@ $(which pip3) install neovim vim-vint pep8 pyflakes yamllint python-language-ser
 npm config set python $(which python)
 npm config set python $(which python3)
 npm install --unsafe-perm -g node-inspector
-npm install -g jsonlint bash-language-server
+npm install -g jsonlint bash-language-server dockerfile-language-server-nodejs
 
 
 mkdir ~/git && cd $_

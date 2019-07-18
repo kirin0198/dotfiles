@@ -110,6 +110,8 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/asyncomplete-lsp.vim')
   call dein#add('prabirshrestha/asyncomplete-necovim.vim')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
+  call dein#add('ryanolsonx/vim-lsp-python')
+  let g:lsp_diagnostics_enabled = 0
 
   " ALEPlug
   if has('job') && has('channel') && has('timers')
@@ -175,7 +177,6 @@ if executable('bash-language-server')
   augroup END
 endif
 
-
 " Python LSP conf
 if executable('pyls')
   augroup pythonLanguageServer
@@ -187,6 +188,18 @@ if executable('pyls')
         \ })
   augroup END
 endif
+
+" Dockerfile LSP conf
+if executable('docker-langserver')
+  augroup dockerLanguageServer
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'docker-langserver',
+          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
+          \ 'whitelist': ['dockerfile'],
+          \ })
+endif
+
 " Vim LSP conf
 augroup vimLanguageServer
   autocmd!
@@ -196,6 +209,7 @@ augroup vimLanguageServer
       \ 'completor': function('asyncomplete#sources#necovim#completor'),
       \ }))
   augroup END
+
 "}}}
 
 "=======================================================================
@@ -236,6 +250,10 @@ set undolevels=1000
 let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
+
+" set lsp
+let g:lsp_signs_error = {'text': '✗'}
+let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
 
 " set ale
 let g:ale_linters = {
