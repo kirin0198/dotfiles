@@ -38,6 +38,7 @@ bindkey '^W' my-backward-delete-word
 
 ########################################
 # Complete
+fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit
 compinit
 zstyle ':completion:*:default' menu select=1
@@ -54,9 +55,8 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
-fpath=(~/.zsh/completion $fpath)
-# zstyle ':completion:*:*:docker:*' option-stacking yes
-# zstyle ':completion:*:*:docker-*:*' option-stacking yes
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 ########################################
 # Git
