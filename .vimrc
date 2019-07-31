@@ -590,6 +590,8 @@ set shiftwidth=2
 set softtabstop=2
 set conceallevel=0
 let g:vim_json_syntax_conceal = 0
+let g:vim_markdown_conceal = 0
+let g:indentLine_setConceal = 0
 
 augroup indentFiletype
   autocmd!
@@ -638,7 +640,7 @@ set splitbelow
 " Marker
 augroup hiddenMarker
   autocmd!
-  autocmd FileType text,markdown,vim setlocal foldmethod=marker
+  autocmd FileType text,vim setlocal foldmethod=marker
 augroup END
 
 
