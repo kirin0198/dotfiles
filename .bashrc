@@ -19,8 +19,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -68,8 +68,10 @@ BBlu='\[\e[1;34m\]'
 Pur='\[\e[0;35m\]'
 
 if [ "$color_prompt" = yes ]; then
-#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    PS1='\[\e[0;31m\]\u\[\e[0;1m\]@\[\e[0;33m\]\h \[\033[01;36m\]\W\[\033[01;32m\]$(__git_ps1) \[\033[01;35m\]>\[\033[00m\] '
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # PS1='\[\e[0;31m\]\u\[\e[0;1m\]@\[\e[0;33m\]\h \[\033[01;36m\]\W\[\033[01;32m\]$(__git_ps1) \[\033[01;35m\]>\[\033[00m\] '
+    PS1='┌─[\[\e[0;33m\]\h\[\e[0;1m\]][\[\033[01;36m\]\W\[\e[0m\]]$(__git_ps1)\[\033[00m\]
+└─\[\033[01;35m\]>\[\033[00m\] '
     if [[ ${EXIT} -ne 0 ]]; then
       PS1+="${Red}✘${RCol} "
     fi
