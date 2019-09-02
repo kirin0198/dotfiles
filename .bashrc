@@ -109,9 +109,6 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -122,8 +119,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.bash_conf/.bash_aliases ]; then
+    . ~/.bash_config/.bash_aliases
 fi
 
 if [ -f ~/.bash_config/git-prompt.sh ]; then
@@ -138,30 +135,9 @@ GIT_PS1_SHOWUPSTREAM=auto
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-    if type "kubectl" > /dev/null 2>&1; then
-      source <(kubectl completion bash)
-    fi
-    if type "helm" > /dev/null 2>&1; then
-      source <(helm completion bash)
-    fi
-    if type "openstack" > /dev/null 2>&1; then
-      source <(openstack complete bash)
-    fi
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-    if type "kubectl" > /dev/null 2>&1; then
-      source <(kubectl completion bash)
-    fi
-    if type "helm" > /dev/null 2>&1; then
-      source <(helm completion bash)
-    fi
-    if type "openstack" > /dev/null 2>&1; then
-      source <(openstack complete bash)
-    fi
-  fi
+
+if [ -f ~/.bash_config/.bash_complete ]; then
+    . ~/.bash_config/.bash_complete
 fi
 
 #function _update_ps1() {

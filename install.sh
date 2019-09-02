@@ -122,7 +122,7 @@ yum install -y ncurses-devel gtk2-devel atk-devel libX11-devel libXt-devel gcc
 
 cd ~/git/vim/src
 
-./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(/usr/bin/python3.6-config) --enable-fail-if-missing
+./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(which python3.6-config) --enable-fail-if-missing
 sudo make && sudo make install
-echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> .bashrc or .zshrc
-echo "[ -f ~/.fzf.bash ] && source ~/.fzf.bash" >> .bashrc or .zshrc
+echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> ~/.zshrc
+echo "[ -f ~/.fzf.bash ] && source ~/.fzf.bash" >> ~/.bashrc
