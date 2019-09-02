@@ -138,10 +138,22 @@ if ! shopt -oq posix; then
     if type "kubectl" > /dev/null 2>&1; then
       source <(kubectl completion bash)
     fi
+    if type "helm" > /dev/null 2>&1; then
+      source <(helm completion bash)
+    fi
+    if type "openstack" > /dev/null 2>&1; then
+      source <(openstack complete bash)
+    fi
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
     if type "kubectl" > /dev/null 2>&1; then
       source <(kubectl completion bash)
+    fi
+    if type "helm" > /dev/null 2>&1; then
+      source <(helm completion bash)
+    fi
+    if type "openstack" > /dev/null 2>&1; then
+      source <(openstack complete bash)
     fi
   fi
 fi
