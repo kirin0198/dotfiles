@@ -1,3 +1,4 @@
+#!/bin/bash
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -11,7 +12,10 @@ if ! shopt -oq posix; then
       source <(helm completion bash)
     fi
     if type "openstack" > /dev/null 2>&1; then
-      source <(openstack complete)
+      if [ -f ~/.bash_config/complete/_openstack ]; then
+        source ~/.bash_config/complete/_openstack
+        # source <(openstack complete)
+      fi
     fi
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
@@ -25,7 +29,10 @@ if ! shopt -oq posix; then
       source <(helm completion bash)
     fi
     if type "openstack" > /dev/null 2>&1; then
-      source <(openstack complete)
+      if [ -f ~/.bash_config/complete/_openstack ]; then
+        source ~/.bash_config/complete/_openstack
+        # source <(openstack complete)
+      fi
     fi
   fi
 fi

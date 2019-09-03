@@ -245,9 +245,9 @@ __git_ps1_colorize_gitstring ()
 	else
 		# Using \[ and \] around colors is necessary to prevent
 		# issues with command line editing/browsing/completion!
-		local c_red='\[\e[31m\]'
-		local c_green='\[\e[32m\]'
-		local c_lblue='\[\e[1;34m\]'
+		local c_red='\[\e[38;05;9m\]'
+		local c_green='\[\e[38;05;46m\]'
+		local c_lblue='\[\e[38;05;63m\]'
 		local c_clear='\[\e[0m\]'
 	fi
 	local bad_color=$c_red
@@ -305,7 +305,7 @@ __git_ps1 ()
 	local detached=no
 	local ps1pc_start='\u@\h:\w '
 	local ps1pc_end='\$ '
-	local printf_format='\e[0m[\e[0;32m%s\e[0m]'
+	local printf_format='%s'
 
 	case "$#" in
 		2|3)	pcmode=yes

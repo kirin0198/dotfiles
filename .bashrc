@@ -15,6 +15,18 @@ if [ -f ~/.bash_proxys ]; then
     . ~/.bash_proxys
 fi
 
+# Definition for git prompt variables and export git-prompt.sh
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWUNTRACKEDFILES=true
+GIT_PS1_SHOWSTASHSTATE=true
+GIT_PS1_SHOWUPSTREAM=auto
+GIT_PS1_SHOWCOLORHINTS=true
+
+if [ -f ~/.bash_config/git-prompt.sh ]; then
+    . ~/.bash_config/git-prompt.sh
+fi
+
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -71,11 +83,12 @@ BYel='\[\e[1;33m\]'
 BBlu='\[\e[1;34m\]'
 Pur='\[\e[0;35m\]'
 
+
 if [ "$color_prompt" = yes ]; then
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     # PS1='\[\e[0;31m\]\u\[\e[0;1m\]@\[\e[0;33m\]\h \[\033[01;36m\]\W\[\033[01;32m\]$(__git_ps1) \[\033[01;35m\]>\[\033[00m\] '
-    PS1='┌─[\[\033[01;36m\]\W\[\e[0;1m\]][\[\e[0;33m\]\h\[\e[0m\]]$(__git_ps1)\[\033[00m\]
-└─\[\033[01;35m\]>\[\033[00m\] '
+    PS1='┌─[\[\033[01;36m\]\W\[\e[00m\]][\[\e[38;05;190m\]\h\[\e[0m\]]$(__git_ps1 "[\[\e[38;05;82m\]%s\[\033[00m\]]")
+└─\[\033[38;5;208m\]>\[\033[00m\] '
     if [[ ${EXIT} -ne 0 ]]; then
       PS1+="${Red}✘${RCol} "
     fi
@@ -122,15 +135,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 if [ -f ~/.bash_conf/.bash_aliases ]; then
     . ~/.bash_config/.bash_aliases
 fi
-
-if [ -f ~/.bash_config/git-prompt.sh ]; then
-    . ~/.bash_config/git-prompt.sh
-fi
-
-GIT_PS1_SHOWDIRTYSTATE=true
-GIT_PS1_SHOWUNTRACKEDFILES=true
-GIT_PS1_SHOWSTASHSTATE=true
-GIT_PS1_SHOWUPSTREAM=auto
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
