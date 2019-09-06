@@ -21,6 +21,10 @@
 # yum install -y git
 # git clone https://github.com/kirin0198/dotfiles.git
 
+if [[ "$#" -eq 0 ]]; then
+  echo "Needed options."
+  exit 1
+fi
 
 while [[ "$#" -gt 0 ]]; do
   case "${1}" in
@@ -109,12 +113,11 @@ $(which pip3) install neovim vim-vint pep8 pyflakes yamllint python-language-ser
 
 # npm install
 npm config set python $(which python)
-npm config set python $(which python3)
 npm install --unsafe-perm -g node-inspector
 npm install -g jsonlint bash-language-server dockerfile-language-server-nodejs
 
 
-mkdir ~/git && cd $_
+mkdir ~/git && cd !$
 git clone https://github.com/vim/vim.git
 
 yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim

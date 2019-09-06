@@ -11,6 +11,8 @@ esac
 # exports
 export TERM=xterm-256color
 
+# If exist proxy for you environment,
+# need to create ~/.bash_config/.bash_proxys file.
 if [ -f ~/.bash_proxys ]; then
     . ~/.bash_proxys
 fi
@@ -89,7 +91,7 @@ if [ "$color_prompt" = yes ]; then
     # PS1='\[\e[0;31m\]\u\[\e[0;1m\]@\[\e[0;33m\]\h \[\033[01;36m\]\W\[\033[01;32m\]$(__git_ps1) \[\033[01;35m\]>\[\033[00m\] '
     PS1='┌─[\[\033[01;36m\]\W\[\e[00m\]][\[\e[38;05;190m\]\h\[\e[0m\]]$(__git_ps1 "[\[\e[38;05;82m\]%s\[\033[00m\]]")
 └─\[\033[38;5;208m\]>\[\033[00m\] '
-    if [[ ${EXIT} -ne 0 ]]; then
+    if [[ $? -ne 0 ]]; then
       PS1+="${Red}✘${RCol} "
     fi
 else
@@ -106,22 +108,8 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -158,3 +146,13 @@ fi
 # Ctrl+w command separator
 stty werase undef
 bind '"\C-w": unix-filename-rubout'
+
+# Key bind
+#{{{
+bind '"\C-n": history-search-forward'
+bind '"\C-p": history-search-backward'
+# 上矢印キー
+bind '"\e[A": history-search-backward'
+# 下矢印キー
+bind '"\e[B": history-search-forward'
+# }}}

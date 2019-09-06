@@ -93,7 +93,7 @@ if dein#load_state(s:dein_path)
   call dein#add('Shougo/neosnippet.vim')
   call dein#add('Shougo/neosnippet-snippets')
   let g:neosnippet#enable_snipmate_compatibility = 1
-  let g:neosnippet#snippets_directory='~/.vim/dein/vim-snippets/snippets'
+  let g:neosnippet#snippets_directory='~/.cache/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets'
 
   " VisualPlug
   call dein#add('itchyny/lightline.vim') "edit status line
@@ -109,6 +109,7 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/asyncomplete.vim')
   call dein#add('prabirshrestha/asyncomplete-lsp.vim')
   call dein#add('prabirshrestha/asyncomplete-necovim.vim')
+  call dein#add('prabirshrestha/asyncomplete-neosnippet.vim')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
   call dein#add('ryanolsonx/vim-lsp-python')
   let g:lsp_diagnostics_enabled = 0
@@ -162,7 +163,7 @@ endif
 "}}}
 
 "=======================================================================
-"=== Language Server Protcol (Complement) ===================================================
+"=== Language Server Protcol ===========================================
 "=======================================================================
 "{{{
 " Bash LSP conf
@@ -208,7 +209,14 @@ augroup vimLanguageServer
       \ 'whitelist': ['vim'],
       \ 'completor': function('asyncomplete#sources#necovim#completor'),
       \ }))
-  augroup END
+augroup END
+
+" LSP Snippet
+call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+    \ 'name': 'neosnippet',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+    \ }))
 
 "}}}
 
@@ -459,7 +467,7 @@ let g:lightline = {
 "}}}
 
 "=======================================================================
-"=== key mapping =======================================================
+"=== Key mapping =======================================================
 "=======================================================================
 "{{{
 " Set leader key
@@ -640,7 +648,7 @@ set splitbelow
 " Marker
 augroup hiddenMarker
   autocmd!
-  autocmd FileType text,vim setlocal foldmethod=marker
+  autocmd FileType text,vim,sh setlocal foldmethod=marker
 augroup END
 
 
