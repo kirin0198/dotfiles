@@ -131,6 +131,11 @@ if dein#load_state(s:dein_path)
   call dein#add('thinca/vim-quickrun') "Quickly executed for the opened file
   call dein#add('mattn/gist-vim') "Edit Gist on vim
 
+  " Color Scheme
+  call dein#add('sjl/badwolf')
+  call dein#add('nanotech/jellybeans.vim')
+  call dein#add('w0ng/vim-hybrid')
+
   " FileSearch
   call dein#add('junegunn/fzf', {'build': './install --all'})
   call dein#add('junegunn/fzf.vim')
@@ -335,8 +340,11 @@ set background=dark
 
 " color scheme list
 "colorscheme solarized
-colorscheme molokai
 "colorscheme torte
+" colorscheme molokai
+" colorscheme badwolf
+colorscheme jellybeans
+" colorscheme hybrid
 
 " highlight cursor line for gray
 set cursorline
@@ -434,7 +442,7 @@ function! LightlineLinterOK() abort
 endfunction
 
 let g:lightline = {
-    \ 'colorscheme': 'seoul256',
+    \ 'colorscheme': 'jellybeans',
     \ 'active': {
     \     'left': [ [ 'mode', 'paste' ],
     \               [ 'fugitive', 'gitgutter', 'readonly', 'filename', 'modified' ],
