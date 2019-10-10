@@ -1,8 +1,10 @@
 #/bin/bash
 
-##################################################################33
+set -e
+
+##################################################################
 # Preparation
-##################################################################33
+##################################################################
 # Login to root
 # Replace "ListenAddress" for /etc/ssh/sshd_config, and restart sshd
 # setenforce 0
@@ -17,9 +19,19 @@
 # fi
 #
 # Update base repository packageis
-# yum update -y
 # yum install -y git
 # git clone https://github.com/kirin0198/dotfiles.git
+
+##################################################################
+# Option check
+##################################################################
+#{{{
+function usage()
+{
+  cat << EOS
+Usage:
+EOS
+}
 
 if [[ "$#" -eq 0 ]]; then
   echo "Needed options."
@@ -53,18 +65,71 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
+#}}}
+
 ##################################################################33
 # Variables
 ##################################################################33
+#{{{
+
 DOT_DIR="${HOME}/dotfiles"
+PACKAGES[0]=""
+PACKAGES[1]=""
+PACKAGES[2]=""
+PACKAGES[3]=""
+PACKAGES[4]=""
+PACKAGES[5]=""
+PACKAGES[6]=""
+PACKAGES[7]=""
+PACKAGES[8]=""
+PACKAGES[9]=""
+PACKAGES[10]=""
+PACKAGES[11]=""
+PACKAGES[12]=""
+
+#}}}
 
 ##################################################################33
 # Functions
 ##################################################################33
+#{{{
 has() {
   type "$1" > /dev/null 2>&1
 }
 
+function _yum_install()
+{
+  YUM_CMD="yum install $#"
+
+  exec ${YUM_CMD}
+  RC=$?
+
+  if [[ ${RC} -ne 0 ]]; then
+    echo "[ERORR] Failed run to yum command."
+    exit 1
+  fi
+
+}
+
+function _pip_install()
+{
+  if has pip3; then
+    PIP_CMD="pip3 $#"
+  else
+    PIP_CMD="pip $#"
+  fi
+
+  exec ${PIP_CMD}
+  RC=$?
+
+  if [[ ${RC} -ne 0 ]]; then
+    echo "[ERROR] Failed run to pip command."
+    exit 1
+  fi
+
+}
+
+#}}}
 
 ##################################################################33
 # MAIN
@@ -127,5 +192,14 @@ cd ~/git/vim/src
 
 ./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(which python3.6-config) --enable-fail-if-missing
 sudo make && sudo make install
-echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> ~/.zshrc
-echo "[ -f ~/.fzf.bash ] && source ~/.fzf.bash" >> ~/.bashrc
+$( echo ${SHELL} )
+case "${SHELL}" in
+  '/bin/bash')
+    echo "[ -f ~/.fzf.bash ] && source ~/.fzf.bash" >> ~/.bashrc
+    ;;
+  '/usr/bin/zsh')
+    echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> ~/.zshrc
+    ;;
+  *)
+    echo "No configuration os FZF."
+esac

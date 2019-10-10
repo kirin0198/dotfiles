@@ -74,7 +74,7 @@ if dein#load_state(s:dein_path)
   " Call deoplete
   if ((has('nvim')  || has('timers')) && has('python3')) && system('pip3 show neovim') !=# ''
     " call dein#add('Shougo/deoplete.nvim')
-    call dein#add('Shougo/neco-vim')
+    " call dein#add('Shougo/neco-vim')
     call dein#add('Shougo/neco-syntax')
     call dein#add('ujihisa/neco-look')
     if !has('nvim')
@@ -82,6 +82,7 @@ if dein#load_state(s:dein_path)
         call dein#add('roxma/vim-hug-neovim-rpc')
     endif
   endif
+  call dein#add('Shougo/neco-vim')
 
   " let g:deoplete#enable_at_startup = 0
 
@@ -207,14 +208,14 @@ if executable('docker-langserver')
 endif
 
 " Vim LSP conf
-augroup vimLanguageServer
-  autocmd!
-  autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+" augroup vimLanguageServer
+autocmd!
+autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
       \ 'name': 'necovim',
       \ 'whitelist': ['vim'],
       \ 'completor': function('asyncomplete#sources#necovim#completor'),
       \ }))
-augroup END
+" augroup END
 
 " LSP Snippet
 call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
