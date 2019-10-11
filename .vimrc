@@ -155,7 +155,7 @@ endif
 
 " Required:
 filetype plugin indent on
-syntax enable
+syntax on
 
 " If you want to install not installed plugins on startup.
 if dein#check_install()
@@ -386,7 +386,6 @@ endfunction
 " augroup END
 " function! s:syntastic()
 "   SyntasticCheck
-"   call lightline#update()
 " endfunction
 
 function! MyFugitive()
@@ -687,6 +686,11 @@ augroup vimrcEx
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
       \ exe "normal g`\"" | endif
 augroup END
+
+" For Hyper tereminal config
+" Syntax is disabled while using Hyper
+" I don't know why
+syntax on
 
 "}}}
 

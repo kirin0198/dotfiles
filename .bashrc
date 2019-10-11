@@ -10,6 +10,8 @@ esac
 
 # exports
 export TERM=xterm-256color
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
 
 # If exist proxy for you environment,
 # need to create ~/.bash_config/.bash_proxys file.
