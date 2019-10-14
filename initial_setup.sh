@@ -45,7 +45,17 @@ while [[ "$#" -gt 0 ]]; do
         echo "Unknown option, ${1}. Show usage with --usage option."
         exit 1
       else
-        LINUX_SYSTEM="${2}"
+        case "${2}" in
+          'redhat'|'centos')
+            LINUX_SYSTEM="rhel"
+          ;;
+          'ubuntu'|'debian')
+            LINUX_SYSTEM="debian"
+          ;;
+          *)
+            echo "Unknown augument, ${2}. Show usage with --usage option."
+          ;;
+        esac
         shift 2
        fi
     ;;
@@ -97,11 +107,23 @@ has() {
   type "$1" > /dev/null 2>&1
 }
 
-function _yum_install()
+function _package_install()
 {
-  YUM_CMD="yum install $#"
+  case "${LINUX_SYSTEM}" in
+    'debian')
+      PKG_INS_CMD="apt install -y"
+      ;;
+    'rhel')
+      PKG_INS_CMD="yum install -y"
+      ;;
+    *)
+      echo "${LINUX_SYSTEM} Didn't match anything"
+    ;;
+  esac
 
-  exec ${YUM_CMD}
+  PKG_INS_CMD="${PKG_INS_CMD} $#"
+
+  exec ${PKG_INS_CMD}
   RC=$?
 
   if [[ ${RC} -ne 0 ]]; then
@@ -114,9 +136,9 @@ function _yum_install()
 function _pip_install()
 {
   if has pip3; then
-    PIP_CMD="pip3 $#"
+    PIP_CMD="pip3 install $#"
   else
-    PIP_CMD="pip $#"
+    PIP_CMD="pip install $#"
   fi
 
   exec ${PIP_CMD}
@@ -156,14 +178,9 @@ done
 # [Deploy]
 # Install for need packageis
 
-if [[ "${LINUX_SYSTEM}" == ubuntu ]]; then
-  CMD="apt install -y"
-elif [[ "${LINUX_SYSTEM}" == rhel ]]; then
-  CMD="yum install -y"
-fi
 
-${CMD} epel-release
-${CMD} python36 python36-devel python36-libs python36-pip npm curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
+_package_install epel-release
+_package_install python36 python36-devel python36-libs python36-pip npm curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
 
 
 # if [[ ${PROXY_FLAG} -eq 1 ]]; then
@@ -201,5 +218,5 @@ case "${SHELL}" in
     echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> ~/.zshrc
     ;;
   *)
-    echo "No configuration os FZF."
+    echo "No configuration of FZF."
 esac
