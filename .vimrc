@@ -372,6 +372,7 @@ let g:gitgutter_sign_removed = '✘'
 " lightline setting
 set noshowmode
 
+set t_ut=
 if !has('gui_running')
   set t_Co=256
 endif
