@@ -525,7 +525,7 @@ nnoremap <Leader>sk <C-w>k
 nnoremap <Leader>sj <C-w>j
 
 " Open terminal
-nnoremap <silent> <Leader>te :terminal<CR>
+nnoremap <silent> <Leader>sh :terminal<CR>
 
 " Git keymap
 nnoremap <silent> <Leader>gf :GFiles<CR>
