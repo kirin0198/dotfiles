@@ -95,6 +95,7 @@ if dein#load_state(s:dein_path)
   call dein#add('Shougo/neosnippet-snippets')
   let g:neosnippet#enable_snipmate_compatibility = 1
   let g:neosnippet#snippets_directory='~/.cache/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets'
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
 
   " VisualPlug
   call dein#add('itchyny/lightline.vim') "edit status line
@@ -131,6 +132,7 @@ if dein#load_state(s:dein_path)
   " call dein#add('scrooloose/syntastic') "Check for syntax
   call dein#add('thinca/vim-quickrun') "Quickly executed for the opened file
   call dein#add('mattn/gist-vim') "Edit Gist on vim
+  call dein#add('majutsushi/tagbar') "Tab jump
 
   " Color Scheme
   call dein#add('sjl/badwolf')
@@ -314,6 +316,10 @@ function! s:Jq(...)
   endif
   execute "%! jq \"" . l:arg . "\""
 endfunction
+
+let g:quickrun_config = {
+      \ '*': {'runner': 'remote/vimproc'},
+      \ }
 
 "}}}
 
@@ -506,7 +512,7 @@ nnoremap <silent> <Leader>n :set relativenumber!<CR>
 " replace strings shortcut
 nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
 
-nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR><ESC>
 
 " Directory Tree for NERDTree
 nnoremap <silent><Leader>tf :NERDTreeToggle<CR>
@@ -514,8 +520,6 @@ let NERDTreeShowHidden = 1 " Disply hidden file
 
 " Tab
 nnoremap <Leader>tn :tabnew<CR>
-" nnoremap <Tab> gt
-" nnoremap <S-Tab> gT
 
 " Move screen
 nnoremap <Leader>sw <C-w>w
@@ -525,7 +529,7 @@ nnoremap <Leader>sk <C-w>k
 nnoremap <Leader>sj <C-w>j
 
 " Open terminal
-nnoremap <silent> <Leader>sh :terminal<CR>
+nnoremap <silent> <Leader>te :terminal<CR>
 
 " Git keymap
 nnoremap <silent> <Leader>gf :GFiles<CR>
@@ -537,7 +541,7 @@ nnoremap <silent> <Leader>g[ :GitGutterPrevHunk<CR>
 
 " File
 nnoremap <Leader>fo :Files<CR>
-nnoremap qq :q<CR>
+nnoremap <silent>qq :q<CR>
 nnoremap <Leader>q1 :q!<CR>
 nnoremap <Leader>ww :w<CR>
 nnoremap <Leader>wq :wq<CR>
@@ -549,6 +553,21 @@ nnoremap <Leader>P "0P
 
 nnoremap n nzz
 nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+nnoremap <Tab> %
+nnoremap <S-Tab> %
+
+nnoremap <F8> :TagbarToggle<CR>
+
+" LSP keymap
+nnoremap <Leader>ld :LspDefinition<CR>
+nnoremap <Leader>lh :LspHover<CR>
+nnoremap <Leader>lf :LspReferences<CR>
+nnoremap <Leader>lr :LspRename<CR>
 
 " jq keymap
 nnoremap <Leader>jq :Jq<CR>
