@@ -14,7 +14,7 @@
 "                    '---'           `---'        `---`
 
 "=======================================================================
-"=== Package Install List ============================================
+"=== Package Install List ==============================================
 "=======================================================================
 " == Vim ==
 " [pip3]
@@ -40,6 +40,18 @@ set encoding=utf-8
 scriptencoding utf-8
 
 let g:python3_host_prog=expand('/usr/bin/python3.6')
+"}}}
+
+"=======================================================================
+"=== Global variables ==================================================
+"=======================================================================
+"{{{
+"}}}
+
+"=======================================================================
+"=== Functions =========================================================
+"=======================================================================
+"{{{
 "}}}
 
 "=======================================================================
@@ -171,7 +183,7 @@ endif
 "}}}
 
 "=======================================================================
-"=== Language Server Protcol ===========================================
+"=== Language Server Protocol ==========================================
 "=======================================================================
 "{{{
 " Bash LSP conf
@@ -317,9 +329,9 @@ function! s:Jq(...)
   execute "%! jq \"" . l:arg . "\""
 endfunction
 
-let g:quickrun_config = {
-      \ '*': {'runner': 'remote/vimproc'},
-      \ }
+" let g:quickrun_config = {
+"       \ '*': {'runner': 'remote/vimproc'},
+"       \ }
 
 "}}}
 
@@ -456,7 +468,7 @@ let g:lightline = {
     \               [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ],
     \     'right': [ [ 'lineinfo' ],
     \                [ 'percent' ],
-    \                [ 'fileformat', 'fileencoding', 'filetype' ] ]
+    \                [ 'fileencoding', 'filetype' ] ]
     \ },
     \ 'component': {
     \     'lineinfo': '%3l:%-2v',
@@ -551,6 +563,9 @@ nnoremap <Leader>bn :bn<CR>
 nnoremap <Leader>p "0p
 nnoremap <Leader>P "0P
 
+nnoremap <F8> :TagbarToggle<CR>
+
+" Search
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
@@ -558,10 +573,15 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
+" Move
 nnoremap <Tab> %
 nnoremap <S-Tab> %
 
-nnoremap <F8> :TagbarToggle<CR>
+" Set
+nnoremap <Plug>(my-switch) <Nop>
+nmap <Leader>o <Plug>(my-switch)
+nnoremap <silent> <Plug>(my-switch)s :<C-u>setl spell! spell?<CR>
+nnoremap <silent> <Plug>(my-switch)l :<C-u>setl list! list?<CR>
 
 " LSP keymap
 nnoremap <Leader>ld :LspDefinition<CR>
@@ -620,7 +640,7 @@ set autoindent
 set smartindent
 set smarttab
 set expandtab
-set listchars=tab:^\ ,trail:~
+set listchars=tab:>-,trail:~,eol:￬
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
