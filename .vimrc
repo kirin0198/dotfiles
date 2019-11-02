@@ -33,29 +33,47 @@
 " bash-language-server
 
 "=======================================================================
-"=== Specify character code ============================================
+"=== 1. Global variables ===============================================
 "=======================================================================
 "{{{
-set encoding=utf-8
-scriptencoding utf-8
-
 let g:python3_host_prog=expand('/usr/bin/python3.6')
+
+let g:netrw_liststyle=1
+let g:netrw_banner=0
+let g:netrw_sizestyle='H'
+let g:netrw_timefmt='%Y/%m/%d(%a) %H:%M:%S'
+let g:netrw_preview=1
+
+let g:vim_json_syntax_conceal = 0
+let g:vim_markdown_conceal = 0
+let g:indentLine_setConceal = 0
+
 "}}}
 
 "=======================================================================
-"=== Global variables ==================================================
+"=== 2. My Functions ======================================================
 "=======================================================================
 "{{{
+function! s:Jq(...)
+  if 0 == a:0
+    let l:arg = '.'
+  else
+    let l:arg = a:1
+  endif
+  execute "%! jq \"" . l:arg . "\""
+endfunction
+
 "}}}
 
 "=======================================================================
-"=== Functions =========================================================
+"=== 3. My command =====================================================
 "=======================================================================
 "{{{
+command! -nargs=? Jq call s:Jq(<f-args>)
 "}}}
 
 "=======================================================================
-"=== dein ==============================================================
+"=== 4. Plugins ========================================================
 "=======================================================================
 "{{{
 " if &compatible
@@ -183,8 +201,185 @@ endif
 "}}}
 
 "=======================================================================
-"=== Language Server Protocol ==========================================
+"=== 5. Basic setting ==================================================
 "=======================================================================
+"{{{
+" ----------------------------------------------------------------------
+" --- 5.1 Encord setting
+" ----------------------------------------------------------------------
+"{{{
+set encoding=utf-8
+scriptencoding utf-8
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 5.2 Editor setting
+" ----------------------------------------------------------------------
+"{{{
+set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
+set infercase           " 補完時に大文字小文字を区別しない
+set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
+"set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
+set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
+set showmatch           " 対応する括弧などをハイライト表示する
+set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+
+" Search
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+
+" Command mode
+set wildmenu
+set wildmode=full
+
+" enable backspace
+set backspace=indent,eol,start
+
+" log level
+set undolevels=1000
+
+" Indent
+set autoindent
+set smartindent
+set smarttab
+set expandtab
+set listchars=tab:>-,trail:~,eol:￬
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set conceallevel=0
+
+augroup indentFiletype
+  autocmd!
+  filetype plugin on
+  filetype indent on
+  "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtab
+  autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType xml         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType groovy      setlocal sw=4 sts=4 ts=4 et
+augroup END
+
+" Marker
+augroup hiddenMarker
+  autocmd!
+  autocmd FileType text,vim,sh setlocal foldmethod=marker
+augroup END
+
+" Undo,Redo
+if has('persistent_undo')
+  set undodir=~/.vim/undo
+  set undofile
+endif
+
+" Highlight Trailing Spaces
+augroup HighlightTrailingSpaces
+  autocmd!
+  autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
+  autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
+augroup END
+
+" Paste
+if &term =~? 'xterm'
+    let &t_SI .= "\e[?2004h"
+    let &t_EI .= "\e[?2004l"
+    let &pastetoggle = "\e[201~"
+
+    function XTermPasteBegin(ret)
+        set paste
+        return a:ret
+    endfunction
+
+    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+endif
+
+" Buffer line
+augroup vimrcEx
+    au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
+      \ exe "normal g`\"" | endif
+augroup END
+
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 5.3 Visual setting
+" ----------------------------------------------------------------------
+"{{{
+set number " Display line number to left
+set ambiwidth=double " Adjust full width
+set ruler " Display cursor line
+set pumheight=10 " Number of candidate displays for completion
+set title " Display file name
+set textwidth=0 " Disable auto indention
+set completeopt=menu,preview "Disply complete preview
+
+set background=dark " Set background colors
+
+" color scheme list
+"colorscheme solarized
+"colorscheme torte
+" colorscheme molokai
+" colorscheme badwolf
+colorscheme jellybeans
+" colorscheme hybrid
+
+set cursorline " highlight cursor line
+highlight cursorline term=reverse cterm=none ctermbg=236
+" set colorcolumn=80
+
+set laststatus=2 " Display status line
+set noshowmode " Disable mode display for lightline
+
+set t_ut=
+if !has('gui_running')
+  set t_Co=256
+endif
+
+" Mute
+set t_vb=
+set visualbell
+set noerrorbells
+
+" Hilight brackets
+set matchpairs& matchpairs+=<:>
+
+" Disable swap
+set nowritebackup
+set nobackup
+set noswapfile
+
+" Mouse
+"set mouse=a
+"set ttymouse=xterm2
+
+" Window
+set splitright
+set splitbelow
+"}}}
+
+"}}}
+
+"=======================================================================
+"=== 6. Plugin setting =================================================
+"=======================================================================
+"{{{
+" ----------------------------------------------------------------------
+" --- 6.1 Language Server Protocol
+" ----------------------------------------------------------------------
 "{{{
 " Bash LSP conf
 if executable('bash-language-server')
@@ -238,162 +433,28 @@ call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_opt
     \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
     \ }))
 
-"}}}
-
-"=======================================================================
-"=== Editor ============================================================
-"=======================================================================
-"{{{
-set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
-set infercase           " 補完時に大文字小文字を区別しない
-set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
-"set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
-set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
-set showmatch           " 対応する括弧などをハイライト表示する
-set matchtime=3         " 対応括弧のハイライト表示を3秒にする
-
-" Search
-set incsearch
-set ignorecase
-set smartcase
-set hlsearch
-
-" Command mode
-set wildmenu
-set wildmode=full
-
-" enable backspace
-set backspace=indent,eol,start
-
-" Undo,Redo
-if has('persistent_undo')
-  set undodir=~/.vim/undo
-  set undofile
-endif
-
-" log level
-set undolevels=1000
-
-" fzf variables
-let g:fzf_action = {
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
 " set lsp
 let g:lsp_signs_error = {'text': '✗'}
 let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
 
-" set ale
-let g:ale_linters = {
-\   'javascript': ['eslint', 'eslint-plugin-vue'],
-\   'sh': ['shell'],
-\   'python': ['pyflakes', 'pep8'],
-\   'ruby': ['rubocop'],
-\   'tex': ['textlint'],
-\   'vim': ['vint'],
-\   'markdown': ['textlint'],
-\   'yaml': ['yamllint'],
-\   'json': ['jsonlint'],
-\   'css': ['stylelint'],
-\}
-
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
-let g:ale_echo_msg_error_str = nr2char(0xf421) . ' '
-let g:ale_echo_msg_warning_str = nr2char(0xf420) . ' '
-let g:ale_echo_msg_info_str = nr2char(0xf05a) . ' '
-let g:ale_echo_msg_format = '%severity%  %linter% - %s'
-let g:ale_sign_column_always = 1
-let g:ale_sign_error = g:ale_echo_msg_error_str
-let g:ale_sign_warning = g:ale_echo_msg_warning_str
-let g:ale_statusline_format = [
-      \ g:ale_echo_msg_error_str . ' %d',
-      \ g:ale_echo_msg_warning_str . ' %d',
-      \ nr2char(0xf4a1) . '  ']
-let g:lightline_delphinus_gitgutter_enable = 1
-" set syntastic
-" let g:syntastic_mode_map = {
-"   \ 'mode': 'passive',
-"   \ 'active_filetypes': ['sh', 'py', 'vim' ]
-"   \ }
-
-command! -nargs=? Jq call s:Jq(<f-args>)
-function! s:Jq(...)
-  if 0 == a:0
-    let l:arg = '.'
-  else
-    let l:arg = a:1
-  endif
-  execute "%! jq \"" . l:arg . "\""
-endfunction
-
-" let g:quickrun_config = {
-"       \ '*': {'runner': 'remote/vimproc'},
-"       \ }
-
 "}}}
 
-"=======================================================================
-"=== Visual ============================================================
-"=======================================================================
+
+" ----------------------------------------------------------------------
+" --- 6.2 Gitgutter
+" ----------------------------------------------------------------------
 "{{{
-set number
-"set list
-set ambiwidth=double
-set ruler
-set pumheight=10
-set title
-set textwidth=0
-set completeopt=menu,preview "Disply complete preview
-
-let g:netrw_liststyle=1
-let g:netrw_banner=0
-let g:netrw_sizestyle='H'
-let g:netrw_timefmt='%Y/%m/%d(%a) %H:%M:%S'
-let g:netrw_preview=1
-
-" Colors
-set background=dark
-
-" color scheme list
-"colorscheme solarized
-"colorscheme torte
-" colorscheme molokai
-" colorscheme badwolf
-colorscheme jellybeans
-" colorscheme hybrid
-
-" highlight cursor line for gray
-set cursorline
-highlight cursorline term=reverse cterm=none ctermbg=236
-" set colorcolumn=80
-
-set laststatus=2
-
-" ALE symbols
-let g:ale_sign_error = '🚫'
-let g:ale_sign_warning = '⚠ '
-
-" GitGutter
 let g:gitgutter_sign_added = '✚'
 let g:gitgutter_sign_modified = '➜'
 let g:gitgutter_sign_removed = '✘'
 
-" airline setting (need powerline)
-"let g:airline_powerline_fonts = 1
-"let g:airline_theme = 'molokai'
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#formatter = 'unique_tail'
+"}}}
 
-" lightline setting
-set noshowmode
-
-set t_ut=
-if !has('gui_running')
-  set t_Co=256
-endif
+" ----------------------------------------------------------------------
+" --- 6.3 Lightline
+" ----------------------------------------------------------------------
+"{{{
+let g:lightline_delphinus_gitgutter_enable = 1
 
 function! MyReadonly()
   return &filetype !~? 'help\|vimfiler\|gundo' && &readonly ? '' : ''
@@ -493,45 +554,89 @@ let g:lightline = {
     \ }
 "}}}
 
+" ----------------------------------------------------------------------
+" --- 6.4 ALE
+" ----------------------------------------------------------------------
+"{{{
+" ALE symbols
+let g:ale_sign_error = '🚫'
+let g:ale_sign_warning = '⚠ '
+
+" set ale
+let g:ale_linters = {
+\   'javascript': ['eslint', 'eslint-plugin-vue'],
+\   'sh': ['shell'],
+\   'python': ['pyflakes', 'pep8'],
+\   'ruby': ['rubocop'],
+\   'tex': ['textlint'],
+\   'vim': ['vint'],
+\   'markdown': ['textlint'],
+\   'yaml': ['yamllint'],
+\   'json': ['jsonlint'],
+\   'css': ['stylelint'],
+\}
+
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:ale_echo_msg_error_str = nr2char(0xf421) . ' '
+let g:ale_echo_msg_warning_str = nr2char(0xf420) . ' '
+let g:ale_echo_msg_info_str = nr2char(0xf05a) . ' '
+let g:ale_echo_msg_format = '%severity%  %linter% - %s'
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = g:ale_echo_msg_error_str
+let g:ale_sign_warning = g:ale_echo_msg_warning_str
+let g:ale_statusline_format = [
+      \ g:ale_echo_msg_error_str . ' %d',
+      \ g:ale_echo_msg_warning_str . ' %d',
+      \ nr2char(0xf4a1) . '  ']
+
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 6.5 FZF
+" ----------------------------------------------------------------------
+"{{{
+let g:fzf_action = {
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 6.6 Quickrun
+" ----------------------------------------------------------------------
+"{{{
+" let g:quickrun_config = {
+"       \ '*': {'runner': 'remote/vimproc'},
+"       \ }
+"}}}
+
+"}}}
+
 "=======================================================================
-"=== Key mapping =======================================================
+"=== 7. Key mapping =======================================================
 "=======================================================================
 "{{{
-" Set leader key
-let mapleader="\<Space>"
+let mapleader="\<Space>" " Set leader key
 
-" General keymap
+" ----------------------------------------------------------------------
+" --- 7.1 Moving key
+" ----------------------------------------------------------------------
+"{{{
 " move line top
 map H ^
 " move line end
 map L $
 
-" Nomal mode keymap
 " Move display line
 noremap j gj
 noremap k gk
-" open .vimrc
-nnoremap <Leader>. :vs ~/.vimrc<CR>
-"nnoremap <Leader>, :split ~/.cache/dein/plugins/plugins.toml<CR>
 
 " Shift-j,Shift-k,jump to blank line
 nnoremap <S-j> }
 nnoremap <S-k> {
-
-" Show relative lines
-nnoremap <silent> <Leader>n :set relativenumber!<CR>
-
-" replace strings shortcut
-nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
-
-nnoremap <silent> <Esc><Esc> :nohlsearch<CR><ESC>
-
-" Directory Tree for NERDTree
-nnoremap <silent><Leader>tf :NERDTreeToggle<CR>
-let NERDTreeShowHidden = 1 " Disply hidden file
-
-" Tab
-nnoremap <Leader>tn :tabnew<CR>
 
 " Move screen
 nnoremap <Leader>sw <C-w>w
@@ -540,19 +645,26 @@ nnoremap <Leader>sh <C-w>h
 nnoremap <Leader>sk <C-w>k
 nnoremap <Leader>sj <C-w>j
 
-" Open terminal
-nnoremap <silent> <Leader>te :terminal<CR>
+nnoremap <Tab> %
+nnoremap <S-Tab> %
 
-" Git keymap
-nnoremap <silent> <Leader>gf :GFiles<CR>
-nnoremap <silent> <Leader>gs :GFiles?<CR>
-nnoremap <silent> <Leader>gd :Gdiff<CR>
-nnoremap <silent> <Leader>gb :Gblame<CR>
-nnoremap <silent> <Leader>g] :GitGutterNextHunk<CR>
-nnoremap <silent> <Leader>g[ :GitGutterPrevHunk<CR>
+" Insert mode keymap
+"inoremap <C-j> <Down>
+"inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+inoremap <C-c> <Esc>
+
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 7.2 File control key
+" ----------------------------------------------------------------------
+"{{{
+" open .vimrc
+nnoremap <Leader>. :vs ~/.vimrc<CR>
 
 " File
-nnoremap <Leader>fo :Files<CR>
 nnoremap <silent>qq :q<CR>
 nnoremap <Leader>q1 :q!<CR>
 nnoremap <Leader>ww :w<CR>
@@ -560,10 +672,25 @@ nnoremap <Leader>wq :wq<CR>
 nnoremap <Leader>vs :vs<CR>
 nnoremap <Leader>bn :bn<CR>
 
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 7.3 Editor key map
+" ----------------------------------------------------------------------
+"{{{
+" Show relative lines
+nnoremap <silent> <Leader>n :set relativenumber!<CR>
+
+" replace strings shortcut
+nnoremap <Leader>re :%s;<C-R><C-W>;g<Left><Left>;
+
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR><ESC>
+
+" Tab
+nnoremap <Leader>tn :tabnew<CR>
+
 nnoremap <Leader>p "0p
 nnoremap <Leader>P "0P
-
-nnoremap <F8> :TagbarToggle<CR>
 
 " Search
 nnoremap n nzz
@@ -573,37 +700,8 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
-" Move
-nnoremap <Tab> %
-nnoremap <S-Tab> %
-
-" Set
-nnoremap <Plug>(my-switch) <Nop>
-nmap <Leader>o <Plug>(my-switch)
-nnoremap <silent> <Plug>(my-switch)s :<C-u>setl spell! spell?<CR>
-nnoremap <silent> <Plug>(my-switch)l :<C-u>setl list! list?<CR>
-
-" LSP keymap
-nnoremap <Leader>ld :LspDefinition<CR>
-nnoremap <Leader>lh :LspHover<CR>
-nnoremap <Leader>lf :LspReferences<CR>
-nnoremap <Leader>lr :LspRename<CR>
-
 " jq keymap
 nnoremap <Leader>jq :Jq<CR>
-
-" QuickhighlightPlug
-nmap <Leader>m <Plug>(quickhl-manual-this)
-xmap <Leader>m <Plug>(quickhl-manual-this)
-nmap <Leader>M <Plug>(quickhl-manual-reset)
-xmap <Leader>M <Plug>(quickhl-manual-reset)
-
-" Insert mode keymap
-"inoremap <C-j> <Down>
-"inoremap <C-k> <Up>
-inoremap <C-h> <Left>
-inoremap <C-l> <Right>
-inoremap <C-c> <Esc>
 
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -612,7 +710,49 @@ inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 " terminal mode keymap
 tnoremap <C-o> <C-w>
 
-" Operator mode keymap
+" Auto escape
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+
+" Set
+nnoremap <Plug>(my-switch) <Nop>
+nmap <Leader>, <Plug>(my-switch)
+nnoremap <silent> <Plug>(my-switch)s :<C-u>setl spell! spell?<CR>
+nnoremap <silent> <Plug>(my-switch)l :<C-u>setl list! list?<CR>
+
+" Open terminal
+nnoremap <silent> <Leader>te :vert terminal<CR>
+
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 7.4 Plugin key map
+" ----------------------------------------------------------------------
+"{{{
+" Gitgutter
+nnoremap <silent> <Leader>gf :GFiles<CR>
+nnoremap <silent> <Leader>gs :GFiles?<CR>
+nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>g] :GitGutterNextHunk<CR>
+nnoremap <silent> <Leader>g[ :GitGutterPrevHunk<CR>
+
+" Tagbar
+nnoremap <F8> :TagbarToggle<CR>
+
+" LSP
+nnoremap <Leader>ld :LspDefinition<CR>
+nnoremap <Leader>lh :LspHover<CR>
+nnoremap <Leader>lf :LspReferences<CR>
+nnoremap <Leader>lr :LspRename<CR>
+
+" Quickhighlight
+nmap <Leader>m <Plug>(quickhl-manual-this)
+xmap <Leader>m <Plug>(quickhl-manual-this)
+nmap <Leader>M <Plug>(quickhl-manual-reset)
+xmap <Leader>M <Plug>(quickhl-manual-reset)
+
+" vim-surround
 onoremap 9 i(
 onoremap " i"
 onoremap ' i'
@@ -620,117 +760,29 @@ onoremap ` i`
 onoremap [ i[
 onoremap { i{
 
-" Command mode keymap
-cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
-cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+" FZF
+nnoremap <Leader>o :Files<CR>
 
 " NeoSnippet map
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
 xmap <C-k> <Plug>(neosnippet_expand_target)
 
+" NERDTree
+nnoremap <silent><Leader>tf :NERDTreeToggle<CR>
+let NERDTreeShowHidden = 1 " Disply hidden file
+
+"}}}
+
 "}}}
 
 "=======================================================================
-"=== Other options =====================================================
+"=== 8. Other options =====================================================
 "=======================================================================
 "{{{
-" Indent
-set autoindent
-set smartindent
-set smarttab
-set expandtab
-set listchars=tab:>-,trail:~,eol:￬
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set conceallevel=0
-let g:vim_json_syntax_conceal = 0
-let g:vim_markdown_conceal = 0
-let g:indentLine_setConceal = 0
-
-augroup indentFiletype
-  autocmd!
-  filetype plugin on
-  filetype indent on
-  "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtab
-  autocmd FileType c           setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType xml         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType css         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType scss        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType groovy      setlocal sw=4 sts=4 ts=4 et
-augroup END
-
-" Mute
-set t_vb=
-set visualbell
-set noerrorbells
-
-" Hilight brackets
-set matchpairs& matchpairs+=<:>
-
-" Disable swap
-set nowritebackup
-set nobackup
-set noswapfile
-
-" Mouse
-"set mouse=a
-"set ttymouse=xterm2
-
-" Window
-set splitright
-set splitbelow
-
-" Marker
-augroup hiddenMarker
-  autocmd!
-  autocmd FileType text,vim,sh setlocal foldmethod=marker
-augroup END
-
-
-" Highlight Trailing Spaces
-augroup HighlightTrailingSpaces
-  autocmd!
-  autocmd VimEnter,WinEnter,ColorScheme * highlight TrailingSpaces term=underline guibg=Red ctermbg=Red
-  autocmd VimEnter,WinEnter * match TrailingSpaces /\s\+$/
-augroup END
-
-" Paste
-if &term =~? 'xterm'
-    let &t_SI .= "\e[?2004h"
-    let &t_EI .= "\e[?2004l"
-    let &pastetoggle = "\e[201~"
-
-    function XTermPasteBegin(ret)
-        set paste
-        return a:ret
-    endfunction
-
-    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
-endif
-
-" Buffer line
-augroup vimrcEx
-    au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
-      \ exe "normal g`\"" | endif
-augroup END
-
 " For Hyper tereminal config
 " Syntax is disabled while using Hyper
 " I don't know why
 syntax on
-
 "}}}
 
