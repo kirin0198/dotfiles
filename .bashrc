@@ -8,10 +8,15 @@ case $- in
       *) return;;
 esac
 
+# set mode
+set -o vi
+
 # exports
 export TERM=xterm-256color
+export EDITOR=vim
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 # If exist proxy for you environment,
 # need to create ~/.bash_config/.bash_proxys file.
