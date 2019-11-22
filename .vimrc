@@ -63,6 +63,17 @@ function! s:Jq(...)
   execute "%! jq \"" . l:arg . "\""
 endfunction
 
+function! s:cursor_moved() abort
+  if exists('s:timer_id')
+    call timer_stop(s:timer_id)
+  endif
+  let s:timer_id = timer_start(3000, function('s:enable_hover'))
+endfunction
+
+function! s:enable_hover(timer_id) abort
+  :LspHover
+endfunction
+
 "}}}
 
 "=======================================================================
@@ -277,7 +288,7 @@ augroup END
 " Marker
 augroup hiddenMarker
   autocmd!
-  autocmd FileType text,vim,sh setlocal foldmethod=marker
+  autocmd FileType text,vim,sh,python setlocal foldmethod=marker
 augroup END
 
 " Undo,Redo
@@ -399,16 +410,18 @@ if executable('bash-language-server')
 endif
 
 " Python LSP conf
-if executable('pyls')
-  augroup pythonLanguageServer
-    autocmd!
+augroup pythonLanguageServer
+  autocmd!
+  if executable('pyls')
     autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'pyls',
         \ 'cmd': {server_info->['pyls']},
         \ 'whitelist': ['python'],
+        \ 'workspace_config': {'pyls': {'plugins': {
+        \   'pycodestyle': {'enabled': v:false},}}}
         \ })
-  augroup END
-endif
+  endif
+augroup END
 
 " Dockerfile LSP conf
 if executable('docker-langserver')
@@ -437,6 +450,9 @@ call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_opt
     \ 'whitelist': ['*'],
     \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
     \ }))
+
+" Auto hover
+autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
 
 " set lsp
 let g:lsp_signs_error = {'text': '✗'}
@@ -564,8 +580,8 @@ let g:lightline = {
 " ----------------------------------------------------------------------
 "{{{
 " ALE symbols
-let g:ale_sign_error = '🚫'
-let g:ale_sign_warning = '⚠ '
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '!!'
 
 " set ale
 let g:ale_linters = {
@@ -675,7 +691,6 @@ nnoremap <Leader>q1 :q!<CR>
 nnoremap <Leader>ww :w<CR>
 nnoremap <Leader>wq :wq<CR>
 nnoremap <Leader>vs :vs<CR>
-nnoremap <Leader>bn :bn<CR>
 
 "}}}
 
@@ -743,7 +758,7 @@ nnoremap <silent> <Leader>g] :GitGutterNextHunk<CR>
 nnoremap <silent> <Leader>g[ :GitGutterPrevHunk<CR>
 
 " Tagbar
-nnoremap <F8> :TagbarToggle<CR>
+nnoremap <silent> <F8> :TagbarToggle<CR>
 
 " LSP
 nnoremap <Leader>ld :LspDefinition<CR>
@@ -767,6 +782,7 @@ onoremap { i{
 
 " FZF
 nnoremap <Leader>o :Files<CR>
+nnoremap <Leader>b :Buffers<CR>
 
 " NeoSnippet map
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
