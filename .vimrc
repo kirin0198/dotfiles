@@ -418,8 +418,8 @@ augroup pythonLanguageServer
         \ 'cmd': {server_info->['pyls']},
         \ 'whitelist': ['python'],
         \ 'workspace_config': {'pyls': {'plugins': {
-        \   'pycodestyle': {'enabled': v:false},}}}
-        \ })
+        \   'pycodestyle': {'enabled': v:false},}}
+        \ }})
   endif
 augroup END
 
@@ -452,7 +452,7 @@ call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_opt
     \ }))
 
 " Auto hover
-autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
+" autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
 
 " set lsp
 let g:lsp_signs_error = {'text': '✗'}
