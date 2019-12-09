@@ -74,6 +74,13 @@ function! s:enable_hover(timer_id) abort
   :LspHover
 endfunction
 
+" debug mode
+function! s:LspDebug() abort
+  let g:lsp_log_verbose = 1
+  let g:lsp_log_file = expand('~/vim-lsp.log')
+  let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+endfunction
+
 "}}}
 
 "=======================================================================
@@ -81,6 +88,7 @@ endfunction
 "=======================================================================
 "{{{
 command! -nargs=? Jq call s:Jq(<f-args>)
+command! LspDebug call s:LspDebug()
 "}}}
 
 "=======================================================================
@@ -155,7 +163,6 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/asyncomplete-neosnippet.vim')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
   call dein#add('ryanolsonx/vim-lsp-python')
-  let g:lsp_diagnostics_enabled = 0
 
   " ALEPlug
   if has('job') && has('channel') && has('timers')
@@ -271,10 +278,10 @@ augroup indentFiletype
   autocmd FileType html        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
   autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et
-  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et foldmethod=marker
+  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et foldmethod=marker
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et foldmethod=marker
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType xml         setlocal sw=4 sts=4 ts=4 et
@@ -283,12 +290,7 @@ augroup indentFiletype
   autocmd FileType sass        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
   autocmd FileType groovy      setlocal sw=4 sts=4 ts=4 et
-augroup END
-
-" Marker
-augroup hiddenMarker
-  autocmd!
-  autocmd FileType text,vim,sh,python setlocal foldmethod=marker
+  autocmd FileType text        setlocal sw=2 sts=2 ts=2 et foldmethod=marker
 augroup END
 
 " Undo,Redo
@@ -417,9 +419,15 @@ augroup pythonLanguageServer
         \ 'name': 'pyls',
         \ 'cmd': {server_info->['pyls']},
         \ 'whitelist': ['python'],
-        \ 'workspace_config': {'pyls': {'plugins': {
-        \   'pycodestyle': {'enabled': v:false},}}
-        \ }})
+        \ 'workspace_config': {
+        \     'pyls': {
+        \         'plugins': {
+        \             'pydocstyle': {'enabled': v:true}
+        \         }
+        \     }
+        \ }
+        \ })
+    autocmd FileType python setlocal omnifunc=lsp#complete
   endif
 augroup END
 
@@ -435,14 +443,14 @@ if executable('docker-langserver')
 endif
 
 " Vim LSP conf
-" augroup vimLanguageServer
+augroup vimLanguageServer
 autocmd!
 autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
       \ 'name': 'necovim',
       \ 'whitelist': ['vim'],
       \ 'completor': function('asyncomplete#sources#necovim#completor'),
       \ }))
-" augroup END
+augroup END
 
 " LSP Snippet
 call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
@@ -455,8 +463,18 @@ call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_opt
 " autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
 
 " set lsp
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_signs_error = {'text': '✗'}
 let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
+
+" TODO: set
+" augroup lsp_folding
+"   autocmd!
+"   autocmd FileType python setlocal
+"         \ foldmethod=expr
+"         \ foldexpr=lsp#ui#vim#folding#foldexpr()
+" augroup end
 
 "}}}
 
@@ -579,15 +597,11 @@ let g:lightline = {
 " --- 6.4 ALE
 " ----------------------------------------------------------------------
 "{{{
-" ALE symbols
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '!!'
-
-" set ale
+" Linter config
 let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
 \   'sh': ['shell'],
-\   'python': ['pyflakes', 'pep8'],
+\   'python': ['pyls'],
 \   'ruby': ['rubocop'],
 \   'tex': ['textlint'],
 \   'vim': ['vint'],
@@ -597,21 +611,25 @@ let g:ale_linters = {
 \   'css': ['stylelint'],
 \}
 
-let g:ale_lint_on_save = 1
+" variable set
+let g:ale_enabled = 1
+let g:ale_lint_on_save = 0
 let g:ale_lint_on_text_changed = 0
 let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
-let g:ale_echo_msg_error_str = nr2char(0xf421) . ' '
-let g:ale_echo_msg_warning_str = nr2char(0xf420) . ' '
-let g:ale_echo_msg_info_str = nr2char(0xf05a) . ' '
+let g:ale_set_quickfix = 0
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '!!'
+let g:ale_echo_msg_error_str = '[ERROR]' . ' '
+let g:ale_echo_msg_warning_str = '[WARN]' . ' '
+let g:ale_echo_msg_info_str = '[INFO]' . ' '
 let g:ale_echo_msg_format = '%severity%  %linter% - %s'
 let g:ale_sign_column_always = 1
-let g:ale_sign_error = g:ale_echo_msg_error_str
-let g:ale_sign_warning = g:ale_echo_msg_warning_str
-let g:ale_statusline_format = [
-      \ g:ale_echo_msg_error_str . ' %d',
-      \ g:ale_echo_msg_warning_str . ' %d',
-      \ nr2char(0xf4a1) . '  ']
+" let g:ale_sign_error = g:ale_echo_msg_error_str
+" let g:ale_sign_warning = g:ale_echo_msg_warning_str
+" let g:ale_statusline_format = [
+"       \ g:ale_echo_msg_error_str . ' %d',
+"       \ g:ale_echo_msg_warning_str . ' %d',
+"       \ nr2char(0xf4a1) . '  ']
 
 "}}}
 
