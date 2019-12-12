@@ -281,7 +281,7 @@ augroup indentFiletype
   autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et foldmethod=marker
   autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et foldmethod=marker
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et foldmethod=marker
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType xml         setlocal sw=4 sts=4 ts=4 et
@@ -291,6 +291,12 @@ augroup indentFiletype
   autocmd FileType javascript  setlocal sw=4 sts=4 ts=4 et
   autocmd FileType groovy      setlocal sw=4 sts=4 ts=4 et
   autocmd FileType text        setlocal sw=2 sts=2 ts=2 et foldmethod=marker
+augroup END
+
+augroup foldSave
+  autocmd!
+  autocmd BufWinLeave * mkview
+  autocmd BufWinEnter * silent loadview
 augroup END
 
 " Undo,Redo
@@ -463,21 +469,14 @@ call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_opt
 " autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
 
 " set lsp
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_enabled = 0
+let g:lsp_diagnostics_echo_cursor = 0
 let g:lsp_signs_error = {'text': '✗'}
 let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
 
-" TODO: set
-" augroup lsp_folding
-"   autocmd!
-"   autocmd FileType python setlocal
-"         \ foldmethod=expr
-"         \ foldexpr=lsp#ui#vim#folding#foldexpr()
 " augroup end
 
 "}}}
-
 
 " ----------------------------------------------------------------------
 " --- 6.2 Gitgutter
@@ -613,8 +612,10 @@ let g:ale_linters = {
 
 " variable set
 let g:ale_enabled = 1
-let g:ale_lint_on_save = 0
-let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_enter = 1
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 let g:ale_sign_error = '>>'
