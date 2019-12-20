@@ -281,7 +281,7 @@ augroup indentFiletype
   autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et foldmethod=marker
   autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et foldmethod=marker
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
-  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et omnifunc=lsp#complete
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType xml         setlocal sw=4 sts=4 ts=4 et
@@ -293,10 +293,28 @@ augroup indentFiletype
   autocmd FileType text        setlocal sw=2 sts=2 ts=2 et foldmethod=marker
 augroup END
 
+function! s:is_view_available() abort " {{{
+  if !&buflisted || &buftype !=# ''
+    return 0
+  elseif !filewritable(expand('%:p'))
+    return 0
+  endif
+  return 1
+endfunction " }}}
+function! s:mkview() abort " {{{
+  if s:is_view_available()
+    silent! mkview
+  endif
+endfunction " }}}
+function! s:loadview() abort " {{{
+  if s:is_view_available()
+    silent! loadview
+  endif
+endfunction " }}}
 augroup foldSave
   autocmd!
-  autocmd BufWinLeave * mkview
-  autocmd BufWinEnter * silent loadview
+  autocmd BufWinLeave ?* call s:mkview()
+  autocmd BufReadPost ?* call s:loadview()
 augroup END
 
 " Undo,Redo
@@ -367,6 +385,7 @@ highlight cursorline term=reverse cterm=none ctermbg=236
 
 set laststatus=2 " Display status line
 set noshowmode " Disable mode display for lightline
+set signcolumn=yes
 
 set t_ut=
 if !has('gui_running')
@@ -428,12 +447,16 @@ augroup pythonLanguageServer
         \ 'workspace_config': {
         \     'pyls': {
         \         'plugins': {
-        \             'pydocstyle': {'enabled': v:true}
+        \             'pyls_mypy': {
+        \                 'enabled': v:true,
+        \                 'live_mode': v:false
+        \             },
+        \             'pydocstyle': {'enabled': v:true},
+        \             'pyls_isort': {'enabled': v:true}
         \         }
         \     }
         \ }
         \ })
-    autocmd FileType python setlocal omnifunc=lsp#complete
   endif
 augroup END
 
@@ -610,6 +633,10 @@ let g:ale_linters = {
 \   'css': ['stylelint'],
 \}
 
+let g:ale_fixers = {
+\  'python': ['pyls-black', 'pyls-isort'],
+\}
+
 " variable set
 let g:ale_enabled = 1
 let g:ale_lint_on_save = 1
@@ -782,8 +809,9 @@ nnoremap <silent> <F8> :TagbarToggle<CR>
 " LSP
 nnoremap <Leader>ld :LspDefinition<CR>
 nnoremap <Leader>lh :LspHover<CR>
-nnoremap <Leader>lf :LspReferences<CR>
-nnoremap <Leader>lr :LspRename<CR>
+nnoremap <Leader>lr :LspReferences<CR>
+nnoremap <Leader>ln :LspRename<CR>
+nnoremap <Leader>lf :LspDocumentFormat<CR>
 
 " Quickhighlight
 nmap <Leader>m <Plug>(quickhl-manual-this)
