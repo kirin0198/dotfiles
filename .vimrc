@@ -48,6 +48,16 @@ let g:vim_json_syntax_conceal = 0
 let g:vim_markdown_conceal = 0
 let g:indentLine_setConceal = 0
 
+let g:pyls_my_config = {
+\  'pyls': {
+\      'plugins': {
+\          'pydocstyle': {'enabled': v:true},
+\          'pyls_isort': {'enabled': v:true},
+\          'pyls_black': {'enabled': v:true}
+\      }
+\  }
+\}
+
 "}}}
 
 "=======================================================================
@@ -444,18 +454,7 @@ augroup pythonLanguageServer
         \ 'name': 'pyls',
         \ 'cmd': {server_info->['pyls']},
         \ 'whitelist': ['python'],
-        \ 'workspace_config': {
-        \     'pyls': {
-        \         'plugins': {
-        \             'pyls_mypy': {
-        \                 'enabled': v:true,
-        \                 'live_mode': v:false
-        \             },
-        \             'pydocstyle': {'enabled': v:true},
-        \             'pyls_isort': {'enabled': v:true}
-        \         }
-        \     }
-        \ }
+        \ 'workspace_config': g:pyls_my_config
         \ })
   endif
 augroup END
@@ -622,7 +621,7 @@ let g:lightline = {
 " Linter config
 let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
-\   'sh': ['shell'],
+\   'sh': ['language_server', 'shell', 'shellcheck'],
 \   'python': ['pyls'],
 \   'ruby': ['rubocop'],
 \   'tex': ['textlint'],
@@ -634,8 +633,11 @@ let g:ale_linters = {
 \}
 
 let g:ale_fixers = {
-\  'python': ['pyls-black', 'pyls-isort'],
+\  'python': ['autopep8'],
+\  'sh': ['shfmt'],
 \}
+
+let g:ale_python_pyls_config = g:pyls_my_config
 
 " variable set
 let g:ale_enabled = 1
@@ -643,8 +645,7 @@ let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 1
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
+" let g:ale_open_list = 1
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '!!'
 let g:ale_echo_msg_error_str = '[ERROR]' . ' '
@@ -652,12 +653,6 @@ let g:ale_echo_msg_warning_str = '[WARN]' . ' '
 let g:ale_echo_msg_info_str = '[INFO]' . ' '
 let g:ale_echo_msg_format = '%severity%  %linter% - %s'
 let g:ale_sign_column_always = 1
-" let g:ale_sign_error = g:ale_echo_msg_error_str
-" let g:ale_sign_warning = g:ale_echo_msg_warning_str
-" let g:ale_statusline_format = [
-"       \ g:ale_echo_msg_error_str . ' %d',
-"       \ g:ale_echo_msg_warning_str . ' %d',
-"       \ nr2char(0xf4a1) . '  ']
 
 "}}}
 
@@ -769,9 +764,9 @@ nnoremap g# g#zz
 " jq keymap
 nnoremap <Leader>jq :Jq<CR>
 
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 
 " terminal mode keymap
 tnoremap <C-o> <C-w>
@@ -787,7 +782,7 @@ nnoremap <silent> <Plug>(my-switch)s :<C-u>setl spell! spell?<CR>
 nnoremap <silent> <Plug>(my-switch)l :<C-u>setl list! list?<CR>
 
 " Open terminal
-nnoremap <silent> <Leader>te :vert terminal<CR>
+nnoremap <silent> <Leader>te terminal<CR>
 
 "}}}
 
