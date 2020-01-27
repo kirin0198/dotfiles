@@ -14,25 +14,6 @@
 "                    '---'           `---'        `---`
 
 "=======================================================================
-"=== Package Install List ==============================================
-"=======================================================================
-" == Vim ==
-" [pip3]
-" neovim
-
-" == ALE lint ==
-" [pip3]
-" vim-vint, pep8, pyflakes, yamllint,
-" [npm]
-" jsonlint
-
-" == Language Server ==
-" [pip3]
-" python-language-server,
-" [npm]
-" bash-language-server
-
-"=======================================================================
 "=== 1. Global variables ===============================================
 "=======================================================================
 "{{{
@@ -173,6 +154,7 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/asyncomplete-neosnippet.vim')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
   call dein#add('ryanolsonx/vim-lsp-python')
+  call dein#add('mattn/vim-lsp-settings')
 
   " ALEPlug
   if has('job') && has('channel') && has('timers')
@@ -464,10 +446,11 @@ if executable('docker-langserver')
   augroup dockerLanguageServer
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'docker-langserver',
-          \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
-          \ 'whitelist': ['dockerfile'],
-          \ })
+        \ 'name': 'docker-langserver',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
+        \ 'whitelist': ['dockerfile'],
+        \ })
+  augroup END
 endif
 
 " Vim LSP conf
@@ -479,6 +462,16 @@ autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#s
       \ 'completor': function('asyncomplete#sources#necovim#completor'),
       \ }))
 augroup END
+" if executable('vim-language-server')
+"   augroup vimLanguageServer
+"     autocmd!
+"     autocmd User lsp_setup call lsp#register_server({
+"           \ 'name': 'vim-language-server',
+"           \ 'cmd' {server_info->['vim-language-server']},
+"           \ 'whitelist': ['vim']
+"           \ })
+"   augroup END
+" endif
 
 " LSP Snippet
 call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
@@ -781,9 +774,6 @@ nmap <Leader>, <Plug>(my-switch)
 nnoremap <silent> <Plug>(my-switch)s :<C-u>setl spell! spell?<CR>
 nnoremap <silent> <Plug>(my-switch)l :<C-u>setl list! list?<CR>
 
-" Open terminal
-nnoremap <silent> <Leader>te terminal<CR>
-
 "}}}
 
 " ----------------------------------------------------------------------
@@ -848,4 +838,3 @@ let NERDTreeShowHidden = 1 " Disply hidden file
 " I don't know why
 syntax on
 "}}}
-
