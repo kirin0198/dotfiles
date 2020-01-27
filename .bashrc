@@ -84,14 +84,13 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-RCol='\[\e[0m\]'
+RCol="\e[0m"
 
-Red='\[\e[0;31m\]'
-Gre='\[\e[0;32m\]'
+Red="\e[0;31m"
+Gre="\e[0;32m"
 BYel='\[\e[1;33m\]'
 BBlu='\[\e[1;34m\]'
 Pur='\[\e[0;35m\]'
-
 
 if [ "$color_prompt" = yes ]; then
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -100,11 +99,17 @@ if [ "$color_prompt" = yes ]; then
 # └─\[\033[38;5;208m\]>\[\033[00m\] '
 #     PS1='┌─[\[\e[38;05;227m\]\W\[\e[00m\]][\[\e[38;05;147m\]\h\[\e[0m\]]$(__git_ps1 "[\[\e[38;05;214m\]%s\[\033[00m\]]")
 # └─\[\033[38;5;71m\]>\[\033[00m\] ' # colorscheme jellybeans style
-    PS1='$(echo $?) [\[\e[38;05;227m\]\W\[\e[00m\]][\[\e[38;05;147m\]\h\[\e[0m\]]$(__git_ps1 "[\[\e[38;05;214m\]%s\[\033[00m\]]") \[\033[38;5;71m\]>\[\033[00m\] '
 
-    if [[ $? -ne 0 ]]; then
-      PS1+="${Red}✘${RCol} "
-    fi
+    export PS1=' [\[\e[38;05;227m\]\W\[\e[00m\]][\[\e[38;05;147m\]\h\[\e[0m\]]$(__git_ps1 "[\[\e[38;05;214m\]%s\[\033[00m\]]") \[\033[38;5;71m\]>\[\033[00m\] '
+
+function __command_rprompt() {
+    local rprompt=$(if [ $? == 0 ]; then echo -e ""; else echo -e "${Red}[`echo $?`]✘ ${RCol}"; fi)
+    local num=$(($COLUMNS - ${#rprompt} - 2))
+    printf "%${num}s$rprompt\r" ''
+}
+
+PROMPT_COMMAND=__command_rprompt
+
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
