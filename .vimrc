@@ -152,6 +152,8 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/asyncomplete-lsp.vim')
   call dein#add('prabirshrestha/asyncomplete-necovim.vim')
   call dein#add('prabirshrestha/asyncomplete-neosnippet.vim')
+  call dein#add('thomasfaingnaert/vim-lsp-snippets')
+  call dein#add('thomasfaingnaert/vim-lsp-neosnippet')
   call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
   call dein#add('ryanolsonx/vim-lsp-python')
   call dein#add('mattn/vim-lsp-settings')
@@ -271,7 +273,7 @@ augroup indentFiletype
   autocmd FileType ruby        setlocal sw=2 sts=2 ts=2 et
   autocmd FileType js          setlocal sw=4 sts=4 ts=4 et
   autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et foldmethod=marker
-  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et foldmethod=marker
+  autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et foldmethod=marker omnifunc=lsp#complete
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python      setlocal sw=4 sts=4 ts=4 et omnifunc=lsp#complete
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
@@ -342,10 +344,10 @@ augroup vimrcEx
       \ exe "normal g`\"" | endif
 augroup END
 
-augroup templates
-  autocmd!
-  autocmd BufNewFile *.py 0r ~/.vim/Templates/py.py
-augroup END
+" augroup templates
+"   autocmd!
+"   autocmd BufNewFile *.py 0r ~/.vim/Templates/py.py
+" augroup END
 
 "}}}
 
@@ -359,7 +361,7 @@ set ruler " Display cursor line
 set pumheight=10 " Number of candidate displays for completion
 set title " Display file name
 set textwidth=0 " Disable auto indention
-set completeopt=menu,preview "Disply complete preview
+set completeopt=menuone,preview "Disply complete preview
 
 set background=dark " Set background colors
 
@@ -834,7 +836,5 @@ let NERDTreeShowHidden = 1 " Disply hidden file
 "=======================================================================
 "{{{
 " For Hyper tereminal config
-" Syntax is disabled while using Hyper
-" I don't know why
 syntax on
 "}}}
