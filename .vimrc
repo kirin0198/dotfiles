@@ -276,6 +276,7 @@ augroup indentFiletype
   autocmd FileType sh          setlocal sw=2 sts=2 ts=2 et foldmethod=marker omnifunc=lsp#complete
   autocmd FileType zsh         setlocal sw=4 sts=4 ts=4 et
   autocmd FileType python      setlocal sw=4 sts=4 ts=4 et omnifunc=lsp#complete
+  autocmd FileType go          setlocal sw=4 sts=4 ts=4 et omnifunc=lsp#complete
   autocmd FileType scala       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType json        setlocal sw=4 sts=4 ts=4 et
   autocmd FileType xml         setlocal sw=4 sts=4 ts=4 et
@@ -475,6 +476,16 @@ augroup END
 "   augroup END
 " endif
 
+" Go lang
+if executable('gopls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'gopls',
+        \ 'cmd': {server_info->['gopls']},
+        \ 'whitelist': ['go'],
+        \ })
+    autocmd BufWritePre *.go LspDocumentFormatSync
+endif
+
 " LSP Snippet
 call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
     \ 'name': 'neosnippet',
@@ -618,6 +629,7 @@ let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
 \   'sh': ['language_server', 'shell', 'shellcheck'],
 \   'python': ['pyls'],
+\   'go': ['gopls'],
 \   'ruby': ['rubocop'],
 \   'tex': ['textlint'],
 \   'vim': ['vint'],
