@@ -356,13 +356,13 @@ augroup END
 " --- 5.3 Visual setting
 " ----------------------------------------------------------------------
 "{{{
-set number " Display line number to left
-set ambiwidth=double " Adjust full width
-set ruler " Display cursor line
-set pumheight=10 " Number of candidate displays for completion
-set title " Display file name
-set textwidth=0 " Disable auto indention
-set completeopt=menuone,preview "Disply complete preview
+set number                       " Display line number to left
+set ambiwidth=double             " Adjust full width
+set ruler                        " Display cursor line
+set pumheight=10                 " Number of candidate displays for completion
+set title                        " Display file name
+set textwidth=0                  " Disable auto indention
+set completeopt=menuone,preview  "Disply complete preview
 
 set background=dark " Set background colors
 
@@ -489,13 +489,12 @@ augroup END
 
 " Auto hover
 " autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
+
 " set lsp
 let g:lsp_diagnostics_enabled = 0
 let g:lsp_diagnostics_echo_cursor = 0
 let g:lsp_signs_error = {'text': '✗'}
 let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
-
-" augroup end
 
 "}}}
 
