@@ -419,22 +419,20 @@ set splitbelow
 " --- 6.1 Language Server Protocol
 " ----------------------------------------------------------------------
 "{{{
-" Bash LSP conf
-if executable('bash-language-server')
-  augroup bashLanguageServer
+augroup LanguageServer
+  " Bash LSP conf
+  if executable('bash-language-server')
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
           \ 'name': 'bash-language-server',
           \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
           \ 'whitelist': ['sh'],
           \ })
-  augroup END
-endif
+  endif
 
-" Python LSP conf
-augroup pythonLanguageServer
-  autocmd!
+  " Python LSP conf
   if executable('pyls')
+    autocmd!
     autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'pyls',
         \ 'cmd': {server_info->['pyls']},
@@ -442,60 +440,55 @@ augroup pythonLanguageServer
         \ 'workspace_config': g:pyls_my_config
         \ })
   endif
-augroup END
 
-" Dockerfile LSP conf
-if executable('docker-langserver')
-  augroup dockerLanguageServer
+  " Dockerfile LSP conf
+  if executable('docker-langserver')
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'docker-langserver',
         \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
         \ 'whitelist': ['dockerfile'],
         \ })
-  augroup END
-endif
+  endif
 
-" Vim LSP conf
-augroup vimLanguageServer
-autocmd!
-autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
-      \ 'name': 'necovim',
-      \ 'whitelist': ['vim'],
-      \ 'completor': function('asyncomplete#sources#necovim#completor'),
-      \ }))
-augroup END
-" if executable('vim-language-server')
-"   augroup vimLanguageServer
-"     autocmd!
-"     autocmd User lsp_setup call lsp#register_server({
-"           \ 'name': 'vim-language-server',
-"           \ 'cmd' {server_info->['vim-language-server']},
-"           \ 'whitelist': ['vim']
-"           \ })
-"   augroup END
-" endif
+  " Vim LSP conf
+  autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+        \ 'name': 'necovim',
+        \ 'whitelist': ['vim'],
+        \ 'completor': function('asyncomplete#sources#necovim#completor'),
+        \ }))
+  " if executable('vim-language-server')
+  "   augroup vimLanguageServer
+  "     autocmd!
+  "     autocmd User lsp_setup call lsp#register_server({
+  "           \ 'name': 'vim-language-server',
+  "           \ 'cmd' {server_info->['vim-language-server']},
+  "           \ 'whitelist': ['vim']
+  "           \ })
+  "   augroup END
+  " endif
 
-" Go lang
-if executable('gopls')
-    au User lsp_setup call lsp#register_server({
+  " Go lang
+  if executable('gopls')
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'gopls',
         \ 'cmd': {server_info->['gopls']},
         \ 'whitelist': ['go'],
         \ })
     autocmd BufWritePre *.go LspDocumentFormatSync
-endif
+  endif
 
-" LSP Snippet
-call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-    \ 'name': 'neosnippet',
-    \ 'whitelist': ['*'],
-    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-    \ }))
+  " LSP Snippet
+  call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+      \ 'name': 'neosnippet',
+      \ 'whitelist': ['*'],
+      \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+      \ }))
+augroup END
 
 " Auto hover
 " autocmd CursorMoved,CursorMovedI * call s:cursor_moved()
-
 " set lsp
 let g:lsp_diagnostics_enabled = 0
 let g:lsp_diagnostics_echo_cursor = 0
