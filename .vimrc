@@ -175,6 +175,7 @@ if dein#load_state(s:dein_path)
   call dein#add('thinca/vim-quickrun') "Quickly executed for the opened file
   call dein#add('mattn/gist-vim') "Edit Gist on vim
   call dein#add('majutsushi/tagbar') "Tab jump
+  call dein#add('mattn/vim-sonictemplate') "Template
 
   " Color Scheme
   call dein#add('sjl/badwolf')
@@ -345,10 +346,11 @@ augroup vimrcEx
       \ exe "normal g`\"" | endif
 augroup END
 
-" augroup templates
-"   autocmd!
-"   autocmd BufNewFile *.py 0r ~/.vim/Templates/py.py
-" augroup END
+" Template
+augroup templates
+  autocmd!
+  autocmd BufNewFile *.py 0r ~/.vim/Templates/header.py
+augroup END
 
 "}}}
 
@@ -452,21 +454,11 @@ augroup LanguageServer
   endif
 
   " Vim LSP conf
-  autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
-        \ 'name': 'necovim',
+  autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'efm-langserver-vim',
+        \ 'cmd': {server_info->['efm-langserver', '-stdin', &shell, &shellcmdflag, 'vint -']},
         \ 'whitelist': ['vim'],
-        \ 'completor': function('asyncomplete#sources#necovim#completor'),
-        \ }))
-  " if executable('vim-language-server')
-  "   augroup vimLanguageServer
-  "     autocmd!
-  "     autocmd User lsp_setup call lsp#register_server({
-  "           \ 'name': 'vim-language-server',
-  "           \ 'cmd' {server_info->['vim-language-server']},
-  "           \ 'whitelist': ['vim']
-  "           \ })
-  "   augroup END
-  " endif
+        \ })
 
   " Go lang
   if executable('gopls')
