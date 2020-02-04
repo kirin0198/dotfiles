@@ -81,7 +81,7 @@ endfunction
 function! s:popup_terminal() abort
   let [w, h] = [80, 24]
   let bid = term_start(['bash'], #{ term_cols: w, term_rows: h, hidden: 1, term_finish: 'close' })
-  let winid = popup_create(bid, #{ minwidth: w, minheight: h })
+  let winid = popup_create(bid, #{ minwidth: w, minheight: h, title: 'bash', border: [] })
 endfunction
 "}}}
 
@@ -779,6 +779,9 @@ nnoremap <Leader>jq :Jq<CR>
 
 " terminal mode keymap
 tnoremap <C-o> <C-w>
+
+" Open terminal with popup
+nnoremap <silent> <Leader>pt :PopTerm<CR>
 
 " Auto escape
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
