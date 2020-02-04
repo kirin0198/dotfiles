@@ -33,7 +33,6 @@ let g:pyls_my_config = {
 \  'pyls': {
 \      'plugins': {
 \          'pydocstyle': {'enabled': v:true},
-\          'pyls_isort': {'enabled': v:true},
 \          'pyls_black': {'enabled': v:true}
 \      }
 \  }
@@ -72,6 +71,18 @@ function! s:LspDebug() abort
   let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 endfunction
 
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
+  nmap <buffer> <f2> <plug>(lsp-rename)
+  " refer to doc to add more commands
+endfunction
+
+function! s:popup_terminal() abort
+  let [w, h] = [80, 24]
+  let bid = term_start(['bash'], #{ term_cols: w, term_rows: h, hidden: 1, term_finish: 'close' })
+  let winid = popup_create(bid, #{ minwidth: w, minheight: h })
+endfunction
 "}}}
 
 "=======================================================================
@@ -80,6 +91,7 @@ endfunction
 "{{{
 command! -nargs=? Jq call s:Jq(<f-args>)
 command! LspDebug call s:LspDebug()
+command! PopTerm call s:popup_terminal()
 "}}}
 
 "=======================================================================
@@ -488,6 +500,12 @@ let g:lsp_diagnostics_echo_cursor = 0
 let g:lsp_signs_error = {'text': '✗'}
 let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
 
+
+augroup lsp_install
+  au!
+  " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 "}}}
 
 " ----------------------------------------------------------------------
@@ -624,7 +642,7 @@ let g:ale_linters = {
 \}
 
 let g:ale_fixers = {
-\  'python': ['autopep8'],
+\  'python': ['black'],
 \  'sh': ['shfmt'],
 \}
 
