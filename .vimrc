@@ -41,7 +41,7 @@ let g:pyls_my_config = {
 "}}}
 
 "=======================================================================
-"=== 2. My Functions ======================================================
+"=== 2. My Functions ===================================================
 "=======================================================================
 "{{{
 function! s:Jq(...)
@@ -71,6 +71,14 @@ function! s:LspDebug() abort
   let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 endfunction
 
+function! s:ToggleCurColumn() abort
+  if &cursorcolumn
+    set nocursorcolumn
+  else
+    set cursorcolumn
+  endif
+endfunction
+
 function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
   setlocal signcolumn=yes
@@ -78,8 +86,14 @@ function! s:on_lsp_buffer_enabled() abort
 endfunction
 
 function! s:popup_terminal() abort
-  let [w, h] = [80, 24]
+  let [w, h] = [100, 30]
   let bid = term_start(['bash'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
+  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
+endfunction
+
+function! s:popup_vim_terminal() abort
+  let [w, h] = [100, 30]
+  let bid = term_start(['vim'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
   let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
 endfunction
 
@@ -88,6 +102,19 @@ function! s:popup_python_terminal() abort
   let bid = term_start(['python3'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
   let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
 endfunction
+
+function! s:py_runner_popup(...) abort
+  if 0 == a:0
+    let l:arg = expand('%:p')
+    let l:cmd = 'python3' . l:arg
+  else
+    let l:arg = a:1
+  endif
+  let [w, h] = [80, 24]
+  let bid = term_start([l:cmd], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
+  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
+endfunction
+
 "}}}
 
 "=======================================================================
@@ -98,6 +125,9 @@ command! -nargs=? Jq call s:Jq(<f-args>)
 command! LspDebug call s:LspDebug()
 command! PopTerm call s:popup_terminal()
 command! PopPyTerm call s:popup_python_terminal()
+command! PopVimTerm call s:popup_vim_terminal()
+command! ToggleCursorColumn call s:ToggleCurColumn()
+" command! PyRunner call s:py_runner_popup()
 "}}}
 
 "=======================================================================
@@ -157,7 +187,6 @@ if dein#load_state(s:dein_path)
 
   " VisualPlug
   call dein#add('itchyny/lightline.vim') "edit status line
-  call dein#add('thinca/vim-showtime') "slid display
   call dein#add('simeji/winresizer') "move window
   call dein#add('Yggdroot/indentLine') "display indent line
   call dein#add('elzr/vim-json') "json file plugin
@@ -172,13 +201,13 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/asyncomplete-neosnippet.vim')
   call dein#add('thomasfaingnaert/vim-lsp-snippets')
   call dein#add('thomasfaingnaert/vim-lsp-neosnippet')
-  call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
+  " call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
   call dein#add('ryanolsonx/vim-lsp-python')
   call dein#add('mattn/vim-lsp-settings')
 
   " ALEPlug
   if has('job') && has('channel') && has('timers')
-    call dein#add('w0rp/ale') "ALE(Asynchronous Lint Engine)
+    call dein#add('dense-analysis/ale') "ALE(Asynchronous Lint Engine)
   else
     call dein#add('vim-syntastic/syntastic')
   endif
@@ -191,14 +220,13 @@ if dein#load_state(s:dein_path)
   call dein#add('tpope/vim-surround') "Auto close parenthesis by S of when selecting  in visual mode
   " call dein#add('scrooloose/syntastic') "Check for syntax
   call dein#add('thinca/vim-quickrun') "Quickly executed for the opened file
-  call dein#add('mattn/gist-vim') "Edit Gist on vim
   call dein#add('majutsushi/tagbar') "Tab jump
   call dein#add('mattn/vim-sonictemplate') "Template
 
   " Color Scheme
-  call dein#add('sjl/badwolf')
+  " call dein#add('sjl/badwolf')
   call dein#add('nanotech/jellybeans.vim')
-  call dein#add('w0ng/vim-hybrid')
+  " call dein#add('w0ng/vim-hybrid')
 
   " FileSearch
   call dein#add('junegunn/fzf', {'build': './install --all'})
@@ -209,7 +237,9 @@ if dein#load_state(s:dein_path)
   call dein#add('tpope/vim-fugitive')
 
   " AnsibleVault plug
-  call dein#add('thiagoalmeidasa/vim-ansible-vault')
+  call dein#add('thiagoalmeidasa/vim-ansible-vault', {
+            \ 'on_ft': 'yaml'
+            \ })
 
   " Required:
   call dein#end()
@@ -236,7 +266,7 @@ endif
 "=======================================================================
 "{{{
 " ----------------------------------------------------------------------
-" --- 5.1 Encord setting
+" --- 5.1 Encode setting
 " ----------------------------------------------------------------------
 "{{{
 set encoding=utf-8
@@ -250,7 +280,7 @@ scriptencoding utf-8
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
 set virtualedit=block   " カーソルを文字が存在しない部分でも動けるようにする
-"set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
+" set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
@@ -382,7 +412,7 @@ set ruler                        " Display cursor line
 set pumheight=10                 " Number of candidate displays for completion
 set title                        " Display file name
 set textwidth=0                  " Disable auto indention
-set completeopt=menuone,preview  "Disply complete preview
+set completeopt=menuone,preview  " Display complete preview
 
 set background=dark " Set background colors
 
@@ -396,7 +426,7 @@ colorscheme jellybeans
 
 set cursorline " highlight cursor line
 highlight cursorline term=reverse cterm=none ctermbg=236
-" set colorcolumn=80
+highlight cursorcolumn term=reverse cterm=none ctermbg=236
 
 set laststatus=2 " Display status line
 set noshowmode " Disable mode display for lightline
@@ -635,7 +665,7 @@ let g:lightline = {
 " Linter config
 let g:ale_linters = {
 \   'javascript': ['eslint', 'eslint-plugin-vue'],
-\   'sh': ['language_server', 'shell', 'shellcheck'],
+\   'sh': ['language_server'],
 \   'python': ['pyls'],
 \   'go': ['gopls'],
 \   'ruby': ['rubocop'],
@@ -693,7 +723,7 @@ let g:fzf_action = {
 "}}}
 
 "=======================================================================
-"=== 7. Key mapping =======================================================
+"=== 7. Key mapping ====================================================
 "=======================================================================
 "{{{
 let mapleader="\<Space>" " Set leader key
@@ -799,6 +829,9 @@ nmap <Leader>, <Plug>(my-switch)
 nnoremap <silent> <Plug>(my-switch)s :<C-u>setl spell! spell?<CR>
 nnoremap <silent> <Plug>(my-switch)l :<C-u>setl list! list?<CR>
 
+" Break F1
+nnoremap <F1> <NOP>
+inoremap <F1> <NOP>
 "}}}
 
 " ----------------------------------------------------------------------
@@ -855,7 +888,7 @@ let NERDTreeShowHidden = 1 " Disply hidden file
 "}}}
 
 "=======================================================================
-"=== 8. Other options =====================================================
+"=== 8. Other options ==================================================
 "=======================================================================
 "{{{
 " For Hyper tereminal config
