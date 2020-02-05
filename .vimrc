@@ -75,13 +75,18 @@ function! s:on_lsp_buffer_enabled() abort
   setlocal omnifunc=lsp#complete
   setlocal signcolumn=yes
   nmap <buffer> <f2> <plug>(lsp-rename)
-  " refer to doc to add more commands
 endfunction
 
 function! s:popup_terminal() abort
   let [w, h] = [80, 24]
-  let bid = term_start(['bash'], #{ term_cols: w, term_rows: h, hidden: 1, term_finish: 'close' })
-  let winid = popup_create(bid, #{ minwidth: w, minheight: h, title: 'bash', border: [] })
+  let bid = term_start(['bash'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
+  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
+endfunction
+
+function! s:popup_python_terminal() abort
+  let [w, h] = [80, 24]
+  let bid = term_start(['python3'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
+  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
 endfunction
 "}}}
 
@@ -92,6 +97,7 @@ endfunction
 command! -nargs=? Jq call s:Jq(<f-args>)
 command! LspDebug call s:LspDebug()
 command! PopTerm call s:popup_terminal()
+command! PopPyTerm call s:popup_python_terminal()
 "}}}
 
 "=======================================================================
