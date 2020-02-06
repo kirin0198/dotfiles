@@ -94,13 +94,13 @@ endfunction
 function! s:popup_vim_terminal() abort
   let [w, h] = [100, 30]
   let bid = term_start(['vim'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
-  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
+  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'vim', 'border': [] })
 endfunction
 
 function! s:popup_python_terminal() abort
   let [w, h] = [80, 24]
   let bid = term_start(['python3'], { 'term_cols': w, 'term_rows': h, 'hidden': 1, 'term_finish': 'close' })
-  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
+  let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'python3', 'border': [] })
 endfunction
 
 function! s:py_runner_popup(...) abort
