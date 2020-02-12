@@ -115,6 +115,9 @@ function! s:py_runner_popup(...) abort
   let winid = popup_create(bid, { 'minwidth': w, 'minheight': h, 'title': 'bash', 'border': [] })
 endfunction
 
+function! s:kara_delete() abort
+  execute '%s; * $;;g'
+endfunction
 "}}}
 
 "=======================================================================
@@ -128,6 +131,8 @@ command! PopPyTerm call s:popup_python_terminal()
 command! PopVimTerm call s:popup_vim_terminal()
 command! ToggleCursorColumn call s:ToggleCurColumn()
 " command! PyRunner call s:py_runner_popup()
+
+command! KaraDelete call s:kara_delete()
 "}}}
 
 "=======================================================================
