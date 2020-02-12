@@ -27,6 +27,7 @@ fi
 # directory move
 # alias ..2="../.."
 # alias ..3="../../.."
+alias python="/usr/bin/python3.6"
 
 # ==========================================
 # Git command aliases
