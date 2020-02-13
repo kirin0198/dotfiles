@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/giraffe/git/Rakuten-NFV/VNF/Playbooks/roles/zabbix-server/templates'
-let g:netrw_dirhist_2='/home/giraffe/git/Rakuten-NFV/VNF/Playbooks'
-let g:netrw_dirhist_3='/home/giraffe/git/Rakuten-NFV/VNF/Playbooks/roles/snmptt/files'
-let g:netrw_dirhist_4='/home/giraffe/git/Rakuten-NFV/VNF/Playbooks/group_vars/proxy-ims1'
-let g:netrw_dirhist_5='/home/giraffe'
-let g:netrw_dirhist_6='/home/giraffe/git/Rakuten-NFV/VNF/Playbooks/group_vars/all'
-let g:netrw_dirhist_7='/home/giraffe/.vim'
