@@ -22,10 +22,10 @@ set -e
 # yum install -y git
 # git clone https://github.com/kirin0198/dotfiles.git
 
-##################################################################
 # Option check
-##################################################################
-#{{{
+
+DOT_DIR="${HOME}/dotfiles"
+
 function usage()
 {
   cat << EOS
@@ -40,29 +40,14 @@ fi
 
 while [[ "$#" -gt 0 ]]; do
   case "${1}" in
-    '--system' )
-      if [[ -z "${2}" ]] || [[ "${2}" =~ ^--+ ]]; then
+    '--cmd'|'-c' )
+      if [[ -z "${2}" ]] || [[ "${2}" =~ ^-+ ]]; then
         echo "Unknown option, ${1}. Show usage with --usage option."
         exit 1
       else
-        case "${2}" in
-          'redhat'|'centos')
-            LINUX_SYSTEM="rhel"
-          ;;
-          'ubuntu'|'debian')
-            LINUX_SYSTEM="debian"
-          ;;
-          *)
-            echo "Unknown augument, ${2}. Show usage with --usage option."
-          ;;
-        esac
+        CMD=${2:-yum}
         shift 2
        fi
-    ;;
-    '--proxy')
-      PROXY_FLAG=1
-      PROXY="${2}"
-      shift 1
     ;;
     '--help'|'--usage')
       usage
@@ -75,55 +60,36 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
-#}}}
-
-##################################################################33
-# Variables
-##################################################################33
-#{{{
-
-DOT_DIR="${HOME}/dotfiles"
-PACKAGES[0]=""
-PACKAGES[1]=""
-PACKAGES[2]=""
-PACKAGES[3]=""
-PACKAGES[4]=""
-PACKAGES[5]=""
-PACKAGES[6]=""
-PACKAGES[7]=""
-PACKAGES[8]=""
-PACKAGES[9]=""
-PACKAGES[10]=""
-PACKAGES[11]=""
-PACKAGES[12]=""
-
-#}}}
-
-##################################################################33
 # Functions
-##################################################################33
-#{{{
 has() {
   type "$1" > /dev/null 2>&1
 }
 
-function _package_install()
-{
-  case "${LINUX_SYSTEM}" in
-    'debian')
-      PKG_INS_CMD="apt install -y"
-      ;;
-    'rhel')
-      PKG_INS_CMD="yum install -y"
-      ;;
-    *)
-      echo "${LINUX_SYSTEM} Didn't match anything"
-    ;;
-  esac
+deploy() {
+  if [[ -d ${DOT_DIR} ]]; then
+    cd "${DOT_DIR}"
+  else
+    /bin/cat << EOS
+[ERROR] Not exist directory. Please execute brow command.
 
-  PKG_INS_CMD="${PKG_INS_CMD} $#"
+    git clone https://github.com/kirin0198/dotfiles.git
 
-  exec ${PKG_INS_CMD}
+EOS
+  fi
+
+  cd ${DOT_DIR}
+
+  for f in .??*; do
+      [ "$f" = ".git" ] && continue
+      [ "$f" = ".gitmodules" ] && continue
+
+      ln -snfv "${DOT_DIR}/$f" "${HOME}"
+  done
+}
+
+package_install() {
+  INSTALL="${CMD} install -y $@"
+  exec ${INSTALL} > /dev/null
   RC=$?
 
   if [[ ${RC} -ne 0 ]]; then
@@ -133,15 +99,15 @@ function _package_install()
 
 }
 
-function _pip_install()
+pip_install()
 {
   if has pip3; then
-    PIP_CMD="pip3 install $#"
+    PIP_CMD="pip3 install $@"
   else
-    PIP_CMD="pip install $#"
+    PIP_CMD="pip install $@"
   fi
 
-  exec ${PIP_CMD}
+  exec ${PIP_CMD} > /dev/null
   RC=$?
 
   if [[ ${RC} -ne 0 ]]; then
@@ -151,72 +117,72 @@ function _pip_install()
 
 }
 
-#}}}
+npm_install()
+{
+  if has npm; then
+    NPM_CMD="npm -g install $@"
+  else
+    NPM_CMD="pip install $@"
+  fi
 
-##################################################################33
+  exec ${NPM_CMD} > /dev/null
+  RC=$?
+
+  if [[ ${RC} -ne 0 ]]; then
+    echo "[ERROR] Failed run to pip command."
+    exit 1
+  fi
+
+}
+
+vim_initialiyze()
+{
+  mkdir ${HOME}/git
+  cd ${HOME}/git
+  git clone https://github.com/vim/vim.git > /dev/null
+  cd ${HOME}/git/vim/src
+
+  if ! has python2.7-config; then
+    exit 1
+  elif has python3.6-config; then
+    exit 1
+  fi
+
+  ./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(which python3.6-config) --enable-fail-if-missing > /dev/null
+
+  sudo make > /dev/null
+  sudo make install > /dev/null
+}
+
+
 # MAIN
-##################################################################33
-if [[ -d ${DOT_DIR} ]]; then
-  cd "${DOT_DIR}"
-else
-  /bin/cat << EOS
-[ERROR] Not exist directory. Please execute brow command.
+main()
+{
+  deploy
 
-    git clone https://github.com/kirin0198/dotfiles.git
+  package_install epel-release
+  package_install python36 python36-devel python36-libs python36-pip npm curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim ncurses-devel gtk2-devel atk-devel libX11-devel libXt-devel gcc
 
-EOS
-fi
+  # pip install
+  pip_install install neovim vim-vint pep8 pyflakes yamllint python-language-server
 
-for f in .??*; do
-    [ "$f" = ".git" ] && continue
-    [ "$f" = ".gitmodules" ] && continue
+  # npm install
+  npm config set python $(which python)
+  npm install --unsafe-perm -g node-inspector
+  npm install -g jsonlint bash-language-server dockerfile-language-server-nodejs
 
-    ln -snfv "${DOT_DIR}/$f" "${HOME}"
-done
+  $( echo ${SHELL} )
+  case "${SHELL}" in
+    '/bin/bash')
+      echo "[ -f ~/.fzf.bash ] && source ~/.fzf.bash" >> ~/.bashrc
+      ;;
+    '/usr/bin/zsh')
+      echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> ~/.zshrc
+      ;;
+    *)
+      echo "No configuration of FZF."
+  esac
+  echo "Finished."
+}
 
-# Install for git and clone my dotfiles
-# [Deploy]
-# Install for need packageis
-
-
-_package_install epel-release
-_package_install python36 python36-devel python36-libs python36-pip npm curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
-
-
-# if [[ ${PROXY_FLAG} -eq 1 ]]; then
-#   pip --proxy http://${PROXY}:${PROXY_PORT}
-#   npm -g config set proxy http://${PROXY}:${PORT}
-# fi
-
-# pip install
-$(which pip3) install --upgrade pip
-$(which pip3) install neovim vim-vint pep8 pyflakes yamllint python-language-server
-
-
-# npm install
-npm config set python $(which python)
-npm install --unsafe-perm -g node-inspector
-npm install -g jsonlint bash-language-server dockerfile-language-server-nodejs
-
-
-mkdir ~/git && cd !$
-git clone https://github.com/vim/vim.git
-
-yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim
-yum install -y ncurses-devel gtk2-devel atk-devel libX11-devel libXt-devel gcc
-
-cd ~/git/vim/src
-
-./configure --with-features=huge --enable-gui=gtk2 --enable-pythoninterp --with-python-config-dir=$(which python2.7-config) --enable-python3interp --with-python3-config-dir=$(which python3.6-config) --enable-fail-if-missing
-sudo make && sudo make install
-$( echo ${SHELL} )
-case "${SHELL}" in
-  '/bin/bash')
-    echo "[ -f ~/.fzf.bash ] && source ~/.fzf.bash" >> ~/.bashrc
-    ;;
-  '/usr/bin/zsh')
-    echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> ~/.zshrc
-    ;;
-  *)
-    echo "No configuration of FZF."
-esac
+main
