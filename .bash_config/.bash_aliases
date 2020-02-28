@@ -4,6 +4,7 @@
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias ks='ls'
 
 alias rm="rm -i"
 alias cp="cp -i"
@@ -49,3 +50,8 @@ alias vimd="vimdiff"
 # kubernetes aliases
 # ==========================================
 alias kc="kubectl"
+
+
+
+alias kt="cd /root/git/KDDI-SPS-NFV/VNF/Playbooks/roles/pm/files/tests"
+alias kp="cd /root/git/KDDI-SPS-NFV/VNF/Playbooks/roles/pm/files"
