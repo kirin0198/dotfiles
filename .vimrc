@@ -202,6 +202,7 @@ if dein#load_state(s:dein_path)
   call dein#add('prabirshrestha/vim-lsp')
   call dein#add('prabirshrestha/asyncomplete.vim')
   call dein#add('prabirshrestha/asyncomplete-lsp.vim')
+  call dein#add('prabirshrestha/asyncomplete-file.vim')
   call dein#add('prabirshrestha/asyncomplete-necovim.vim')
   call dein#add('prabirshrestha/asyncomplete-neosnippet.vim')
   call dein#add('thomasfaingnaert/vim-lsp-snippets')
@@ -506,12 +507,12 @@ augroup LanguageServer
         \ })
   endif
 
-  " Vim LSP conf
-  autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'efm-langserver-vim',
-        \ 'cmd': {server_info->['efm-langserver', '-stdin', &shell, &shellcmdflag, 'vint -']},
-        \ 'whitelist': ['vim'],
-        \ })
+  " " Vim LSP conf
+  " autocmd User lsp_setup call lsp#register_server({
+  "       \ 'name': 'efm-langserver-vim',
+  "       \ 'cmd': {server_info->['efm-langserver', '-stdin', &shell, &shellcmdflag, 'vint -']},
+  "       \ 'whitelist': ['vim'],
+  "       \ })
 
   " Go lang
   if executable('gopls')
@@ -529,6 +530,13 @@ augroup LanguageServer
       \ 'name': 'neosnippet',
       \ 'whitelist': ['*'],
       \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+      \ }))
+
+  autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+      \ 'name': 'file',
+      \ 'whitelist': ['*'],
+      \ 'priority': 10,
+      \ 'completor': function('asyncomplete#sources#file#completor')
       \ }))
 augroup END
 
@@ -723,6 +731,13 @@ let g:fzf_action = {
 " let g:quickrun_config = {
 "       \ '*': {'runner': 'remote/vimproc'},
 "       \ }
+"}}}
+
+" ----------------------------------------------------------------------
+" --- 6.7 Neosnippet
+" ----------------------------------------------------------------------
+"{{{
+let g:neosnippet#snippets_directory='~/.vim/vim-snippets/snippets'
 "}}}
 
 "}}}

@@ -1,0 +1,14 @@
+snippet     defarg
+abbr        def get_args() ...
+options     head
+	def get_args():
+		parser = argparse.ArgumentParser(description="${1:#:description}")
+
+		${2:pass}
+
+		return parser.parse_args()
+
+snippet     args
+abbr        parser.add_argment(...)
+options     head
+  parser.add_argument('${1:--argment}', action="${2:store}", metavar=("${3:VALUE}"), help="${4:#description}")
