@@ -11,4 +11,17 @@ options     head
 snippet     args
 abbr        parser.add_argment(...)
 options     head
-  parser.add_argument('${1:--argment}', action="${2:store}", metavar=("${3:VALUE}"), help="${4:#description}")
+  parser.add_argument("${1:--argment}", action="${2:store}", metavar=("${3:VALUE}"), help="${4:#description}")
+
+snippet     subparse
+abbr        subparsers = parser.add_subparsers() ...
+options     head
+	subparsers = parser.add_subparsers()
+
+	parser_${1:parser_name} = subparsers.add_parser("$1", help="${2:help message}")
+
+	parser_$1.set_defaults(handler=command_$1)
+
+	args = parser.parse_args()
+	if hasattr(args, "handler"):
+		return args
