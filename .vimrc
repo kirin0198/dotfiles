@@ -457,8 +457,9 @@ set nobackup
 set noswapfile
 
 " Mouse
-"set mouse=a
-"set ttymouse=xterm2
+set mouse=a
+" set ttymouse=xterm2
+set ttymouse=sgr
 
 " Window
 set splitright
