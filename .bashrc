@@ -9,7 +9,7 @@ case $- in
 esac
 
 # set mode
-set -o vi
+# set -o vi
 
 # exports
 export TERM=xterm-256color
