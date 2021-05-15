@@ -33,33 +33,6 @@ Usage:
 EOS
 }
 
-if [[ "$#" -eq 0 ]]; then
-  echo "Needed options."
-  exit 1
-fi
-
-while [[ "$#" -gt 0 ]]; do
-  case "${1}" in
-    '--cmd'|'-c' )
-      if [[ -z "${2}" ]] || [[ "${2}" =~ ^-+ ]]; then
-        echo "Unknown option, ${1}. Show usage with --usage option."
-        exit 1
-      else
-        CMD=${2:-yum}
-        shift 2
-       fi
-    ;;
-    '--help'|'--usage')
-      usage
-      exit 0
-    ;;
-    *)
-      echo "Unknown option, ${1}. Show usage with --usage option."
-      exit 1
-    ;;
-  esac
-done
-
 # Functions
 has() {
   type "$1" > /dev/null 2>&1
@@ -88,12 +61,12 @@ EOS
 }
 
 package_install() {
-  INSTALL="${CMD} install -y $@"
+  INSTALL="sudo ${CMD} install -y $@"
   exec ${INSTALL} > /dev/null
   RC=$?
 
   if [[ ${RC} -ne 0 ]]; then
-    echo "[ERORR] Failed run to yum command."
+    echo "[ERORR] Failed run to ${CMD} command."
     exit 1
   fi
 
@@ -154,17 +127,37 @@ vim_initialiyze()
   sudo make install > /dev/null
 }
 
+check_os()
+{
+  source /etc/os-release
+  case "$NAME" in
+    Ubuntu*)
+      CMD="apt"
+      source ${DOT_DIR}/config_debian
+      ;;
+    Red*)
+      CMD="yum"
+      source ${DOT_DIR}/config_fedora
+      ;;
+    Cent*)
+      CMD="yum"
+      source ${DOT_DIR}/config_fedora
+      ;;
+    *)
+      echo "$NAME Didn't match anything"
+  esac
+}
 
 # MAIN
 main()
 {
   deploy
 
-  package_install epel-release
-  package_install python36 python36-devel python36-libs python36-pip npm curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-ExtUtils-MakeMaker vim ncurses-devel gtk2-devel atk-devel libX11-devel libXt-devel gcc
+  check_os
+  package_install ${PACKAGE_LIST[@]}
 
   # pip install
-  pip_install install neovim vim-vint pep8 pyflakes yamllint python-language-server
+  pip_install install neovim vim-vint pep8 pyflakes yamllint python-language-server['all']
 
   # npm install
   npm config set python $(which python)

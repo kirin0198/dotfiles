@@ -28,7 +28,7 @@ fi
 # directory move
 # alias ..2="../.."
 # alias ..3="../../.."
-alias python="/usr/bin/python3.6"
+alias python="/usr/bin/python3"
 
 # ==========================================
 # Git command aliases
@@ -55,3 +55,9 @@ alias kc="kubectl"
 
 alias kt="cd /root/git/KDDI-SPS-NFV/VNF/Playbooks/roles/pm/files/tests"
 alias kp="cd /root/git/KDDI-SPS-NFV/VNF/Playbooks/roles/pm/files"
+
+# ==========================================
+# docker aliases
+# ==========================================
+alias dc="docker"
+alias dcc="docker container"
