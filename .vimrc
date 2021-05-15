@@ -777,11 +777,7 @@ nnoremap <Tab> %
 nnoremap <S-Tab> %
 
 " Insert mode keymap
-"inoremap <C-j> <Down>
-"inoremap <C-k> <Up>
-" inoremap <C-h> <Left>
-" inoremap <C-l> <Right>
-" inoremap <C-c> <Esc>
+inoremap <C-l> <Right>
 
 "}}}
 
